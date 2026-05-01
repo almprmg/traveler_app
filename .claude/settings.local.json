@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\private\\\\traveler_app\\\\lib\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Read(//d/kp project/kp_individuals_app/**)",
+      "PowerShell(Get-ChildItem -Path \"D:\\\\kp project\\\\kp_individuals_app\\\\lib\" -Recurse | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty FullName | Sort-Object)",
+      "PowerShell($features = @\\(\\); Get-ChildItem -Path \"D:\\\\kp project\\\\kp_individuals_app\\\\lib\\\\features\" -Directory | ForEach-Object { $features += $_.Name }; $features | Sort-Object)"
+    ]
+  }
+}
