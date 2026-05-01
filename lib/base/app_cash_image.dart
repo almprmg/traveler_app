@@ -31,13 +31,12 @@ class AppCachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLogger.info('Loading image: ${UrlHandler.handleUrl(imageUrl!)}');
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.zero,
       child: imageUrl?.endsWith(".svg") == true
           ? SvgPicture.network(imageUrl!, fit: fit)
           : CachedNetworkImage(
-              imageUrl: imageUrl != null ? UrlHandler.handleUrl(imageUrl!) : '',
+              imageUrl: imageUrl != null ? imageUrl! : '',
               width: width,
               height: height,
               fit: fit,
