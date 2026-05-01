@@ -6,6 +6,7 @@ import 'package:traveler_app/features/home/widgets/home_banner_section.dart';
 import 'package:traveler_app/features/home/widgets/home_destinations_section.dart';
 import 'package:traveler_app/features/home/widgets/home_hotels_section.dart';
 import 'package:traveler_app/features/home/widgets/home_section_label.dart';
+import 'package:traveler_app/features/home/widgets/home_skeleton.dart';
 import 'package:traveler_app/features/home/widgets/home_tours_section.dart';
 import 'package:traveler_app/util/app_theme.dart';
 
@@ -21,7 +22,7 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            return const HomeSkeletonScreen();
           }
           final data = controller.homeData.value;
           if (data == null) {
@@ -47,10 +48,7 @@ class HomeScreen extends StatelessWidget {
               slivers: [
                 const HomeAppBar(),
                 SliverToBoxAdapter(
-                  child: HomeBannerSection(
-                    banners: data.banners,
-                    controller: controller,
-                  ),
+                  child: HomeBannerSection(banners: data.banners),
                 ),
                 SliverToBoxAdapter(
                   child: HomeSectionLabel(label: 'destinations'.tr),

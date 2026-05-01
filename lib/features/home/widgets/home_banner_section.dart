@@ -7,16 +7,15 @@ import 'package:traveler_app/util/app_theme.dart';
 
 class HomeBannerSection extends StatelessWidget {
   final List<HomeBanner> banners;
-  final HomeController controller;
 
   const HomeBannerSection({
     super.key,
     required this.banners,
-    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<HomeController>();
     if (banners.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
