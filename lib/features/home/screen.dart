@@ -8,6 +8,7 @@ import 'package:traveler_app/features/home/widgets/home_hotels_section.dart';
 import 'package:traveler_app/features/home/widgets/home_section_label.dart';
 import 'package:traveler_app/features/home/widgets/home_skeleton.dart';
 import 'package:traveler_app/features/home/widgets/home_tours_section.dart';
+import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -51,19 +52,28 @@ class HomeScreen extends StatelessWidget {
                   child: HomeBannerSection(banners: data.banners),
                 ),
                 SliverToBoxAdapter(
-                  child: HomeSectionLabel(label: 'destinations'.tr),
+                  child: HomeSectionLabel(
+                    label: 'destinations'.tr,
+                    onViewAll: () => Get.toNamed(toursRoute),
+                  ),
                 ),
                 SliverToBoxAdapter(
-                  child: HomeDestinationsSection(destinations: data.destinations),
+                  child: HomeDestinationsSection(
+                    destinations: data.destinations,
+                  ),
                 ),
                 SliverToBoxAdapter(
-                  child: HomeSectionLabel(label: 'popular_tours'.tr),
+                  child: HomeSectionLabel(
+                    label: 'popular_tours'.tr,
+                    onViewAll: () => Get.toNamed(toursRoute),
+                  ),
                 ),
+                SliverToBoxAdapter(child: HomeToursSection(tours: data.tours)),
                 SliverToBoxAdapter(
-                  child: HomeToursSection(tours: data.tours),
-                ),
-                SliverToBoxAdapter(
-                  child: HomeSectionLabel(label: 'hotels'.tr),
+                  child: HomeSectionLabel(
+                    label: 'hotels'.tr,
+                    onViewAll: () => Get.toNamed(hotelsRoute),
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: HomeHotelsSection(hotels: data.hotels),

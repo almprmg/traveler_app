@@ -1,10 +1,8 @@
-import 'package:traveler_app/util/app_logger.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/util/url_handler.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AppCachedImage extends StatelessWidget {

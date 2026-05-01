@@ -29,7 +29,6 @@ class HomeModel {
   }
 }
 
-
 class HomeBanner {
   final String id;
   final String imageUrl;
@@ -55,11 +54,13 @@ class HomeBanner {
 
 class Destination {
   final String id;
+  final String slug;
   final String name;
   final String imageUrl;
 
   Destination({
     required this.id,
+    required this.slug,
     required this.name,
     required this.imageUrl,
   });
@@ -67,6 +68,7 @@ class Destination {
   factory Destination.fromJson(Map<String, dynamic> json) {
     return Destination(
       id: json['id']?.toString() ?? '',
+      slug: json['slug'] ?? json['id']?.toString() ?? '',
       name: json['name'] ?? '',
       imageUrl: json['image_url'] ?? '',
     );
@@ -75,6 +77,7 @@ class Destination {
 
 class Tour {
   final String id;
+  final String slug;
   final String title;
   final String imageUrl;
   final double price;
@@ -82,6 +85,7 @@ class Tour {
 
   Tour({
     required this.id,
+    required this.slug,
     required this.title,
     required this.imageUrl,
     required this.price,
@@ -91,6 +95,7 @@ class Tour {
   factory Tour.fromJson(Map<String, dynamic> json) {
     return Tour(
       id: json['id']?.toString() ?? '',
+      slug: json['slug'] ?? json['id']?.toString() ?? '',
       title: json['title'] ?? '',
       imageUrl: json['image_url'] ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0,
@@ -101,6 +106,7 @@ class Tour {
 
 class Hotel {
   final String id;
+  final String slug;
   final String name;
   final String imageUrl;
   final double rating;
@@ -109,6 +115,7 @@ class Hotel {
 
   Hotel({
     required this.id,
+    required this.slug,
     required this.name,
     required this.imageUrl,
     required this.rating,
@@ -119,6 +126,7 @@ class Hotel {
   factory Hotel.fromJson(Map<String, dynamic> json) {
     return Hotel(
       id: json['id']?.toString() ?? '',
+      slug: json['slug'] ?? json['id']?.toString() ?? '',
       name: json['name'] ?? '',
       imageUrl: json['image_url'] ?? '',
       rating: (json['rating'] as num?)?.toDouble() ?? 0,

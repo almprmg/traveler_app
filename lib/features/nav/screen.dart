@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:traveler_app/features/explore/screen.dart';
 import 'package:traveler_app/features/home/screen.dart';
 import 'package:traveler_app/features/nav/controller/nav_controller.dart';
 import 'package:traveler_app/features/nav/widgets/bottom_nav_bar.dart';
@@ -21,6 +22,7 @@ class _NavScreenState extends State<NavScreen> {
 
   static const _pages = [
     HomeScreen(),
+    ExploreScreen(),
     ReservationsScreen(),
     ProfileScreen(),
   ];

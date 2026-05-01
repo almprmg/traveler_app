@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/features/home/model/home_model.dart';
+import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
 
 class HomeDestinationsSection extends StatelessWidget {
@@ -19,26 +21,34 @@ class HomeDestinationsSection extends StatelessWidget {
         itemCount: destinations.length,
         itemBuilder: (_, i) {
           final d = destinations[i];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Column(
-              children: [
-                AppCachedImage(
-                  imageUrl: d.imageUrl,
-                  width: 70,
-                  height: 70,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  d.name,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppTheme.textPrimary,
+          return GestureDetector(
+            onTap: () => Get.toNamed(
+              toursRoute,
+              arguments: {'destinationSlug': d.slug, 'destinationName': d.name},
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Column(
+                children: [
+                  ClipOval(
+                    child: AppCachedImage(
+                      imageUrl: d.imageUrl,
+                      width: 70,
+                      height: 70,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 6),
+                  Text(
+                    d.name,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
