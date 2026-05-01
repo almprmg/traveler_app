@@ -934,5 +934,12 @@
   "welcome_message": "Welcome to Kafarat Plus",
   "write_your_issue": "Write your issue",
   "yesterday": "Yesterday",
-  "you_have_not_created_any_support_tickets_yet": "You have not created any support tickets yet"
+  "you_have_not_created_any_support_tickets_yet": "You have not created any support tickets yet",
+  "welcome_back": "Welcome back 👋",
+  "explore_the_world": "Explore the world",
+  "destinations": "Destinations",
+  "popular_tours": "Popular Tours",
+  "hotels": "Hotels",
+  "failed_to_load": "Failed to load",
+  "reservations": "Reservations"
 }

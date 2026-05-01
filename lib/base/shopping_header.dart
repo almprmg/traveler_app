@@ -3,9 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/circle_icon_button.dart';
+import 'package:traveler_app/controllers/auth_controller.dart';
 import 'package:traveler_app/controllers/localization_controller.dart';
-import 'package:traveler_app/features/auth/controller/auth_controller.dart';
-import 'package:traveler_app/features/cart/controller/cart_controller.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
 
@@ -100,56 +99,16 @@ class _CartIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<CartController>(
-      builder: (cart) {
-        final count = cart.cartItemCount;
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            CircleIconButton(
-              icon: HugeIcons.strokeRoundedShoppingCart01,
-              onTap:
-                  onTap ??
-                  () {
-                    if (Get.find<AuthController>().isLoggedIn()) {
-                      Get.toNamed('/cart');
-                    } else {
-                      Get.toNamed('/login');
-                    }
-                  },
-            ),
-            if (count > 0)
-              Positioned(
-                top: -2,
-                right: -2,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5,
-                    vertical: 1,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppTheme.error,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppTheme.white, width: 1.5),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 18,
-                    minHeight: 18,
-                  ),
-                  child: Text(
-                    '$count',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppTheme.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+    return CircleIconButton(
+      icon: HugeIcons.strokeRoundedShoppingCart01,
+      onTap: onTap ??
+          () {
+            if (Get.find<AuthController>().isLoggedIn()) {
+              Get.toNamed('/cart');
+            } else {
+              Get.toNamed('/login');
+            }
+          },
     );
   }
 }

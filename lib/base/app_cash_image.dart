@@ -1,3 +1,4 @@
+import 'package:traveler_app/util/app_logger.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -30,6 +31,7 @@ class AppCachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLogger.info('Loading image: ${UrlHandler.handleUrl(imageUrl!)}');
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.zero,
       child: imageUrl?.endsWith(".svg") == true

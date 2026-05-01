@@ -5,6 +5,11 @@ import 'package:traveler_app/models/lang_model.dart';
 import 'package:traveler_app/data/local/local_storage_service.dart';
 
 class LocalizationController extends GetxController {
+  static final List<LanguageModel> supportedLanguages = [
+    LanguageModel(imageUrl: '', languageName: 'English', countryCode: 'US', languageCode: 'en'),
+    LanguageModel(imageUrl: '', languageName: 'عربي', countryCode: 'SA', languageCode: 'ar'),
+  ];
+
   final LocalStorageService localStorageService;
 
   LocalizationController({required this.localStorageService}) {
@@ -12,8 +17,8 @@ class LocalizationController extends GetxController {
   }
 
   Locale _locale = Locale(
-    AppConstants.languages[0].languageCode!,
-    AppConstants.languages[0].countryCode,
+    supportedLanguages[0].languageCode!,
+    supportedLanguages[0].countryCode,
   );
   bool _isLtr = true;
   List<LanguageModel> _languages = [];
@@ -37,20 +42,20 @@ class LocalizationController extends GetxController {
   void loadCurrentLanguage() async {
     _locale = Locale(
       localStorageService.getString(AppConstants.languageCode) ??
-          AppConstants.languages[0].languageCode!,
+          supportedLanguages[0].languageCode!,
       localStorageService.getString(AppConstants.countryCode) ??
-          AppConstants.languages[0].countryCode,
+          supportedLanguages[0].countryCode,
     );
     _isLtr = _locale.languageCode != 'ar' && _locale.languageCode != 'ur';
 
-    for (int index = 0; index < AppConstants.languages.length; index++) {
-      if (AppConstants.languages[index].languageCode == _locale.languageCode) {
+    for (int index = 0; index < supportedLanguages.length; index++) {
+      if (supportedLanguages[index].languageCode == _locale.languageCode) {
         _selectedIndex = index;
         break;
       }
     }
     _languages = [];
-    _languages.addAll(AppConstants.languages);
+    _languages.addAll(supportedLanguages);
 
     update();
   }
@@ -78,11 +83,11 @@ class LocalizationController extends GetxController {
   void searchLanguage(String query) {
     if (query.isEmpty) {
       _languages = [];
-      _languages = AppConstants.languages;
+      _languages = supportedLanguages;
     } else {
       _selectedIndex = -1;
       _languages = [];
-      for (var language in AppConstants.languages) {
+      for (var language in supportedLanguages) {
         if (language.languageName!.toLowerCase().contains(
           query.toLowerCase(),
         )) {

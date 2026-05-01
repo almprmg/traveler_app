@@ -934,5 +934,12 @@
   "welcome_message": "مرحبًا بك في كفارة بلس",
   "write_your_issue": "اكتب مشكلتك",
   "yesterday": "أمس",
-  "you_have_not_created_any_support_tickets_yet": "لم تقم بإنشاء أي تذاكر دعم بعد"
+  "you_have_not_created_any_support_tickets_yet": "لم تقم بإنشاء أي تذاكر دعم بعد",
+  "welcome_back": "مرحباً بعودتك 👋",
+  "explore_the_world": "استكشف العالم",
+  "destinations": "الوجهات",
+  "popular_tours": "الجولات الشائعة",
+  "hotels": "الفنادق",
+  "failed_to_load": "فشل التحميل",
+  "reservations": "الحجوزات"
 }
