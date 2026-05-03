@@ -1,3 +1,4 @@
+import 'package:traveler_app/util/app_constants.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,9 +33,11 @@ class AppCachedImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.zero,
       child: imageUrl?.endsWith(".svg") == true
-          ? SvgPicture.network(imageUrl!, fit: fit)
+          ? SvgPicture.network(AppConstants.baseUrl + imageUrl!, fit: fit)
           : CachedNetworkImage(
-              imageUrl: imageUrl != null ? imageUrl! : '',
+              imageUrl: imageUrl != null
+                  ? AppConstants.baseUrl + imageUrl!
+                  : '',
               width: width,
               height: height,
               fit: fit,
