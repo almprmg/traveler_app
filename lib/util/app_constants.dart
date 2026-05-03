@@ -3,7 +3,7 @@ class AppConstants {
 
   static const String fontFamily = 'Cairo';
   static const String baseUrl =
-      'https://2a0c-2001-16a3-f8d-4c00-4626-1090-fc24-d7ea.ngrok-free.app';
+      'https://test.prodiet.cloud';
   static const String apiUrl = '$baseUrl/api/v1/';
   static const double appVersion = 0.01;
 
