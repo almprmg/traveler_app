@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
@@ -13,56 +12,55 @@ class HomeActivitiesStrip extends StatelessWidget {
     final items = <_ActivityItem>[
       _ActivityItem(
         label: 'tab_tour'.tr,
-        icon: HugeIcons.strokeRoundedLocation04,
-        color: const Color(0xFF61B6F7),
+        image: 'assets/images/tour_icon.webp',
         onTap: () => Get.toNamed(toursRoute),
       ),
       _ActivityItem(
         label: 'tab_hotel'.tr,
-        icon: HugeIcons.strokeRoundedHotel01,
-        color: const Color(0xFFF6B756),
+        image: 'assets/images/hotel_icon.webp',
         onTap: () => Get.toNamed(hotelsRoute),
       ),
       _ActivityItem(
         label: 'tab_activities'.tr,
-        icon: HugeIcons.strokeRoundedActivity01,
-        color: const Color(0xFF7CC58A),
+        image: 'assets/images/Activities_icon.webp',
         onTap: () => Get.toNamed(activitiesRoute),
       ),
       _ActivityItem(
         label: 'tab_visa'.tr,
-        icon: HugeIcons.strokeRoundedPassport,
-        color: const Color(0xFFB28BE3),
+        image: 'assets/images/visa_icon.webp',
         onTap: () => Get.toNamed(visasRoute),
       ),
       _ActivityItem(
         label: 'tab_transport'.tr,
-        icon: HugeIcons.strokeRoundedCar01,
-        color: const Color(0xFFE3826B),
+        image: 'assets/images/transport_icon.webp',
         onTap: () => Get.toNamed(transportsRoute),
       ),
     ];
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 4, 12),
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
             child: Text(
               'browse_by_activity'.tr,
               style: AppTypography.h4.copyWith(
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w800,
                 color: AppTheme.textPrimary,
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              for (final it in items) _ActivityCircle(item: it),
-            ],
+          SizedBox(
+            height: 132,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 4, 20, 8),
+              itemCount: items.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (_, i) => _ActivityCard(item: items[i]),
+            ),
           ),
         ],
       ),
@@ -72,47 +70,58 @@ class HomeActivitiesStrip extends StatelessWidget {
 
 class _ActivityItem {
   final String label;
-  final List<List<dynamic>> icon;
-  final Color color;
+  final String image;
   final VoidCallback onTap;
   _ActivityItem({
     required this.label,
-    required this.icon,
-    required this.color,
+    required this.image,
     required this.onTap,
   });
 }
 
-class _ActivityCircle extends StatelessWidget {
+class _ActivityCard extends StatelessWidget {
   final _ActivityItem item;
-  const _ActivityCircle({required this.item});
+  const _ActivityCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: item.onTap,
-      borderRadius: BorderRadius.circular(40),
-      child: Column(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: item.color.withValues(alpha: 0.18),
-              shape: BoxShape.circle,
+    return SizedBox(
+      width: 104,
+      child: Material(
+        color: AppTheme.background.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          onTap: item.onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Ink(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    item.image,
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    item.label,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.labelSmall.copyWith(
+                      color: AppTheme.textPrimary,
+                      fontWeight: FontWeight.w700,
+                      height: 1.2,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            alignment: Alignment.center,
-            child: HugeIcon(icon: item.icon, color: item.color, size: 28),
           ),
-          const SizedBox(height: 6),
-          Text(
-            item.label,
-            style: AppTypography.labelSmall.copyWith(
-              color: AppTheme.textSecondary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

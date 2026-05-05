@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/sky_background.dart';
+import 'package:traveler_app/base/sunny_sky.dart';
 import 'package:traveler_app/features/home/controller/home_controller.dart';
 import 'package:traveler_app/features/home/widgets/home_activities_strip.dart';
 import 'package:traveler_app/features/home/widgets/home_app_bar.dart';
@@ -9,7 +9,6 @@ import 'package:traveler_app/features/home/widgets/home_popular_hotels_section.d
 import 'package:traveler_app/features/home/widgets/home_promo_section.dart';
 import 'package:traveler_app/features/home/widgets/home_recommended_section.dart';
 import 'package:traveler_app/features/home/widgets/home_search_pill.dart';
-import 'package:traveler_app/features/home/widgets/home_search_tabs_section.dart';
 import 'package:traveler_app/features/home/widgets/home_skeleton.dart';
 import 'package:traveler_app/features/home/widgets/home_top_destinations_section.dart';
 import 'package:traveler_app/util/app_theme.dart';
@@ -83,11 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         const HomeAppBar(),
                         const SliverToBoxAdapter(child: SizedBox(height: 12)),
                         const SliverToBoxAdapter(child: HomeSearchPill()),
-                        SliverToBoxAdapter(
-                          child: HomeSearchTabsSection(
-                            destinations: data.destinations,
-                          ),
-                        ),
                         const SliverToBoxAdapter(child: HomeActivitiesStrip()),
                         SliverToBoxAdapter(
                           child: HomeRecommendedSection(tours: data.tours),

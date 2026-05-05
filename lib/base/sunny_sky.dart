@@ -22,15 +22,16 @@ class SkyBackground extends StatelessWidget {
     this.child,
     this.coverFull = false,
     this.topFraction = 0.35,
-    this.opacity = 0.22,
+    this.opacity = 0.45,
     this.clouds = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    final imageHeight =
-        coverFull ? mq.size.height : mq.size.height * topFraction;
+    final imageHeight = coverFull
+        ? mq.size.height
+        : mq.size.height * topFraction;
 
     return Stack(
       fit: StackFit.expand,
@@ -60,8 +61,11 @@ class _SkyLayer extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        const DecoratedBox(
-          decoration: BoxDecoration(gradient: _SkyGradient.gradient),
+        const Opacity(
+          opacity: 0.4,
+          child: DecoratedBox(
+            decoration: BoxDecoration(gradient: _SkyGradient.gradient),
+          ),
         ),
         Opacity(opacity: opacity, child: const _SkyImage()),
         if (!coverFull)
@@ -70,11 +74,7 @@ class _SkyLayer extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Color(0x00FFFFFF),
-                  Color(0x00FFFFFF),
-                  AppTheme.white,
-                ],
+                colors: [Color(0x00FFFFFF), Color(0x00FFFFFF), AppTheme.white],
                 stops: [0.0, 0.55, 1.0],
               ),
             ),
@@ -85,10 +85,18 @@ class _SkyLayer extends StatelessWidget {
 }
 
 class _SkyGradient {
+  // Sunny sky: blue at top → warm sun haze → white horizon, matching sunny_sky.webp.
   static const gradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [AppTheme.skyTop, AppTheme.skyBottom],
+    colors: [
+      Color(0xFF6FB4DB), // top sky blue
+      Color(0xFFA9CFE7), // mid sky
+      Color(0xFFFFD68A), // sunny yellow horizon
+      Color(0xFFFFF1D6), // warm haze
+      AppTheme.white,
+    ],
+    stops: [0.0, 0.35, 0.62, 0.82, 1.0],
   );
 }
 
@@ -110,7 +118,7 @@ class _SkyImageState extends State<_SkyImage> {
 
   Future<void> _probe() async {
     try {
-      await rootBundle.load('assets/images/sky_background.png');
+      await rootBundle.load('assets/images/sunny_sky.webp');
     } catch (_) {
       if (mounted) setState(() => _exists = false);
     }
@@ -120,7 +128,7 @@ class _SkyImageState extends State<_SkyImage> {
   Widget build(BuildContext context) {
     if (!_exists) return const SizedBox.shrink();
     return Image.asset(
-      'assets/images/sky_background.png',
+      'assets/images/sunny_sky.webp',
       fit: BoxFit.cover,
       errorBuilder: (_, _, _) => const SizedBox.shrink(),
     );

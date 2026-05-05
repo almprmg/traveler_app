@@ -6,6 +6,7 @@ import 'package:traveler_app/features/visas/controller/visas_controller.dart';
 import 'package:traveler_app/features/visas/widgets/visa_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/search_forms.dart';
 
 class VisasScreen extends StatefulWidget {
   const VisasScreen({super.key});
@@ -31,8 +32,14 @@ class _VisasScreenState extends State<VisasScreen> {
       appBar: AppBar(title: Text('tab_visa'.tr)),
       body: Column(
         children: [
+          VisaSearchForm(
+            onSearch: (_) {
+              FocusScope.of(context).unfocus();
+              _c.fetch();
+            },
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               onChanged: _c.search,
               decoration: InputDecoration(

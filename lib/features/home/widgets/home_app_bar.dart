@@ -57,7 +57,7 @@ class HomeAppBar extends StatelessWidget {
                     ),
             ),
             _CircleButton(
-              icon: HugeIcons.strokeRoundedNotification03,
+              icon: HugeIcons.strokeRoundedNotification01,
               onTap: () {},
             ),
           ],
@@ -80,8 +80,8 @@ class _Greeting extends StatelessWidget {
         Text(
           line1,
           style: AppTypography.bodySmall.copyWith(
-            color: AppTheme.textTertiary,
-            fontWeight: FontWeight.w500,
+            color: AppTheme.textPrimary,
+            fontWeight: FontWeight.w400,
           ),
         ),
         const SizedBox(height: 2),
@@ -154,7 +154,7 @@ class _CircleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppTheme.white,
+      color: AppTheme.white.withValues(alpha: 0.6),
       shape: const CircleBorder(
         side: BorderSide(color: AppTheme.cardBorder, width: 1),
       ),
@@ -163,7 +163,7 @@ class _CircleButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: HugeIcon(icon: icon, color: AppTheme.textPrimary, size: 18),
+          child: HugeIcon(icon: icon, color: AppTheme.textPrimary, size: 22),
         ),
       ),
     );

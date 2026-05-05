@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:traveler_app/base/empty_state.dart';
+import 'package:traveler_app/features/home/controller/home_controller.dart';
 import 'package:traveler_app/features/hotels/controller/hotels_controller.dart';
 import 'package:traveler_app/features/hotels/widgets/hotel_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/search_forms.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 class HotelsScreen extends StatefulWidget {
@@ -40,8 +42,16 @@ class _HotelsScreenState extends State<HotelsScreen> {
       ),
       body: Column(
         children: [
+          HotelSearchForm(
+            destinations:
+                Get.find<HomeController>().homeData.value?.destinations ?? [],
+            onSearch: (_) {
+              FocusScope.of(context).unfocus();
+              _c.fetch();
+            },
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               onChanged: _c.search,
               decoration: InputDecoration(

@@ -4,8 +4,10 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/empty_state.dart';
 import 'package:traveler_app/features/activities/controller/activities_controller.dart';
 import 'package:traveler_app/features/activities/widgets/activity_card.dart';
+import 'package:traveler_app/features/home/controller/home_controller.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/search_forms.dart';
 
 class ActivitiesScreen extends StatefulWidget {
   const ActivitiesScreen({super.key});
@@ -31,8 +33,16 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
       appBar: AppBar(title: Text('tab_activities'.tr)),
       body: Column(
         children: [
+          ActivitiesSearchForm(
+            destinations:
+                Get.find<HomeController>().homeData.value?.destinations ?? [],
+            onSearch: (_) {
+              FocusScope.of(context).unfocus();
+              _c.fetch();
+            },
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               onChanged: _c.search,
               decoration: InputDecoration(

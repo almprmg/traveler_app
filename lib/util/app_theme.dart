@@ -5,46 +5,50 @@ import 'app_typography.dart';
 
 class AppTheme {
   static const Color black = Color(0xFF000000);
-  static const Color primary = Color(0xFF1750BF);
-  static const Color primaryLight = Color(0xFF4294FF);
-  static const Color primaryDark = Color.fromARGB(255, 27, 73, 201);
+  // Only primary + sky gradient are blue — vibrant badge blue, dark enough for white text.
+  static const Color primary = Color(0xFF0E7AD8);
+  static const Color primaryLight = Color(0xFF4FA6EE);
+  static const Color primaryDark = Color(0xFF0A60AE);
 
-  static const Color secondary = Color(0xFF64748B);
-  static const Color secondaryLight = Color(0xFF94A3B8);
-  static const Color secondaryDark = Color(0xFF475569);
+  // Everything else lives on a calm, bold gray scale.
+  static const Color secondary = Color(0xFF6B7280);
+  static const Color secondaryLight = Color(0xFF9CA3AF);
+  static const Color secondaryDark = Color(0xFF4B5563);
 
-  static const Color background = Color(0xFFF1F7FF);
-  static const Color backgroundLight = Color(0xFFF7FAFE);
-  static const Color backgroundDark = Color(0xFFE7F0FB);
-  static const Color skyTop = Color(0xFFE8F2FE);
-  static const Color skyBottom = Color(0xFFD6E7FB);
+  static const Color background = Color(0xFFEEF0F3);
+  static const Color backgroundLight = Color(0xFFF6F7F9);
+  static const Color backgroundDark = Color(0xFFDDE0E5);
+  // Sky gradient stops — calm sky blue fading to a near-white haze.
+  static const Color skyTop = Color(0xFF7FBBDD);
+  static const Color skyBottom = Color(0xFFD9E8F2);
 
-  static const Color textPrimary = Color(0xFF0F172A);
-  static const Color textSecondary = Color(0xFF475569);
-  static const Color textTertiary = Color(0xFF64748B);
+  static const Color textPrimary = Color(0xFF1F242D);
+  static const Color textSecondary = Color(0xFF4A5260);
+  static const Color textTertiary = Color(0xFF7A8290);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
-  static const Color success = Color.fromARGB(255, 0, 190, 73);
-  static const Color warning = Color(0xFFF59E0B);
-  static const Color error = Color(0xFFEF4444);
-  static const Color info = Color(0xFF3B82F6);
+  static const Color success = Color(0xFF6B8E7A);
+  static const Color warning = Color(0xFFB8945F);
+  static const Color error = Color(0xFFB85C5C);
+  // Info reuses the sky primary so accent blues stay consistent.
+  static const Color info = Color(0xFF0E7AD8);
 
-  static const Color border = Color(0xFFE2E8F0);
-  static const Color borderMedium = Color(0xFFCBD5E1);
-  static const Color borderDark = Color.fromARGB(255, 162, 178, 201);
+  static const Color border = Color(0xFFDDE1E7);
+  static const Color borderMedium = Color(0xFFC5CAD3);
+  static const Color borderDark = Color(0xFFA0A7B3);
 
-  static const Color shimmerBase = Color(0xFFEBEBEB);
-  static const Color shimmerHighlight = Color(0xFFF4F4F4);
+  static const Color shimmerBase = Color(0xFFE3E5EA);
+  static const Color shimmerHighlight = Color(0xFFF1F2F5);
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color shadow = Color(0x00000000);
   // Shadows removed across the app for a flat, modern look.
   static List<BoxShadow> get lightShadow => const [];
-  static const Color cardBorder = Color(0xFFE6EEF8);
+  static const Color cardBorder = Color(0xFFE2E5EA);
 
-  static const Color gold = Color(0xFFB58E2E);
-  static const Color deepBlue = Color(0xFF1E40AF);
-  static const Color total = Color(0xFFEEF2FF);
+  static const Color gold = Color(0xFF9C8554);
+  static const Color deepBlue = Color(0xFF0A60AE);
+  static const Color total = Color(0xFFEDEFF2);
 
   static const double spacing2 = 2.0;
   static const double spacing4 = 4.0;
@@ -338,11 +342,13 @@ class AppTheme {
   static List<BoxShadow> get mediumShadow => const [];
   static List<BoxShadow> get heavyShadow => const [];
 
+  // Multi-stop sky: deeper top, mid-day haze, near-white horizon.
   static LinearGradient get skyGradient => const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [skyTop, skyBottom],
-      );
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [primary, skyTop, skyBottom],
+    stops: [0.0, 0.55, 1.0],
+  );
 }
 
 class AppScreenWrapper extends StatelessWidget {

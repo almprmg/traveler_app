@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/empty_state.dart';
+import 'package:traveler_app/features/home/controller/home_controller.dart';
 import 'package:traveler_app/features/transports/controller/transports_controller.dart';
 import 'package:traveler_app/features/transports/widgets/transport_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/search_forms.dart';
 
 class TransportsScreen extends StatefulWidget {
   const TransportsScreen({super.key});
@@ -31,8 +33,16 @@ class _TransportsScreenState extends State<TransportsScreen> {
       appBar: AppBar(title: Text('tab_transport'.tr)),
       body: Column(
         children: [
+          TransportSearchForm(
+            destinations:
+                Get.find<HomeController>().homeData.value?.destinations ?? [],
+            onSearch: (_) {
+              FocusScope.of(context).unfocus();
+              _c.fetch();
+            },
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               onChanged: _c.search,
               decoration: InputDecoration(

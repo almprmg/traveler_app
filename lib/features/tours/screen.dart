@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:traveler_app/base/empty_state.dart';
+import 'package:traveler_app/features/home/controller/home_controller.dart';
 import 'package:traveler_app/features/tours/controller/tours_controller.dart';
 import 'package:traveler_app/features/tours/widgets/tour_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/search_forms.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 class ToursScreen extends StatefulWidget {
@@ -40,8 +42,16 @@ class _ToursScreenState extends State<ToursScreen> {
       ),
       body: Column(
         children: [
+          TourSearchForm(
+            destinations:
+                Get.find<HomeController>().homeData.value?.destinations ?? [],
+            onSearch: (_) {
+              FocusScope.of(context).unfocus();
+              _c.fetch();
+            },
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
             child: TextField(
               onChanged: _c.search,
               decoration: InputDecoration(

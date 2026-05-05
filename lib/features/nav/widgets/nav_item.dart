@@ -30,25 +30,40 @@ class NavItem extends StatelessWidget {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primary.withValues(alpha: 0.1) : Colors.transparent,
+            color: isSelected
+                ? AppTheme.background.withValues(alpha: 0.7)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(50),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              HugeIcon(
-                icon: isSelected ? activeIcon : icon,
-                color: isSelected ? AppTheme.primary : Colors.grey,
-                size: 22,
-              ),
+              if (isSelected)
+                ShaderMask(
+                  shaderCallback: (bounds) =>
+                      AppTheme.primaryGradient.createShader(bounds),
+                  blendMode: BlendMode.srcIn,
+                  child: HugeIcon(
+                    icon: activeIcon,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                )
+              else
+                HugeIcon(icon: icon, color: Colors.grey, size: 22),
               if (isSelected) ...[
                 const SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: AppTheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                ShaderMask(
+                  shaderCallback: (bounds) =>
+                      AppTheme.primaryGradient.createShader(bounds),
+                  blendMode: BlendMode.srcIn,
+                  child: Text(
+                    label,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
