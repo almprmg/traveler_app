@@ -13,7 +13,9 @@
       "Bash(Select-Object FullName, PSIsContainer)",
       "Bash(Sort-Object FullName)",
       "Bash(Get-ChildItem -Path \"d:\\\\private\\\\traveler_app\\\\lib\" -Recurse -File)",
-      "Bash(flutter analyze *)"
+      "Bash(flutter analyze *)",
+      "Bash(Get-ChildItem -Path \"d:\\\\private\\\\traveler_app\\\\lib\\\\features\" -Recurse -Directory)",
+      "WebFetch(domain:test.prodiet.cloud)"
     ]
   }
 }

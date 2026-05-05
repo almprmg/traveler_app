@@ -20,200 +20,220 @@ class BookingCreateScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(title: Text('booking_detail'.tr)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(c.productTitle.value, style: AppTypography.h3),
-            const SizedBox(height: 16),
-            _section(
-              title: 'travel_dates'.tr,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Obx(() => _PickerTile(
-                      icon: HugeIcons.strokeRoundedCalendarCheckIn02,
-                      label: 'start_date'.tr,
-                      value: c.startDate.value == null
-                          ? 'select_date'.tr
-                          : _fmt(c.startDate.value!),
-                      onTap: () async {
-                        final now = DateTime.now();
-                        final v = await showDatePicker(
-                          context: context,
-                          initialDate: c.startDate.value ?? now,
-                          firstDate: now,
-                          lastDate: DateTime(now.year + 2),
-                        );
-                        if (v != null) c.startDate.value = v;
-                      },
-                    )),
-                const SizedBox(height: 8),
-                Obx(() => _PickerTile(
-                      icon: HugeIcons.strokeRoundedCalendarCheckOut02,
-                      label: 'end_date'.tr,
-                      value: c.endDate.value == null
-                          ? 'optional'.tr
-                          : _fmt(c.endDate.value!),
-                      onTap: () async {
-                        final start = c.startDate.value ?? DateTime.now();
-                        final v = await showDatePicker(
-                          context: context,
-                          initialDate:
-                              c.endDate.value ?? start.add(const Duration(days: 1)),
-                          firstDate: start,
-                          lastDate: DateTime(start.year + 2),
-                        );
-                        if (v != null) c.endDate.value = v;
-                      },
-                    )),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _section(
-              title: 'travelers'.tr,
-              children: [
-                Obx(() => _CounterTile(
-                      label: 'adults'.tr,
-                      icon: HugeIcons.strokeRoundedUser,
-                      value: c.adultQty.value,
-                      min: 1,
-                      onChanged: (v) => c.adultQty.value = v,
-                    )),
-                const SizedBox(height: 8),
-                Obx(() => _CounterTile(
-                      label: 'children'.tr,
-                      icon: HugeIcons.strokeRoundedUserCircle,
-                      value: c.childQty.value,
-                      min: 0,
-                      onChanged: (v) => c.childQty.value = v,
-                    )),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _section(
-              title: 'contact_details'.tr,
-              children: [
-                _Field(
-                  label: 'name_label'.tr,
-                  hint: 'name_hint'.tr,
-                  onChanged: (v) => c.firstName.value = v,
-                ),
-                _Field(
-                  label: 'last_name_label'.tr,
-                  hint: 'last_name_hint'.tr,
-                  onChanged: (v) => c.lastName.value = v,
-                ),
-                _Field(
-                  label: 'phone_label'.tr,
-                  hint: 'phone_hint'.tr,
-                  keyboard: TextInputType.phone,
-                  onChanged: (v) => c.phone.value = v,
-                ),
-                _Field(
-                  label: 'email_label'.tr,
-                  hint: 'email_hint'.tr,
-                  keyboard: TextInputType.emailAddress,
-                  onChanged: (v) => c.email.value = v,
-                ),
-                _Field(
-                  label: 'address'.tr,
-                  hint: 'address_hint'.tr,
-                  onChanged: (v) => c.address.value = v,
-                ),
-                _Field(
-                  label: 'notes'.tr,
-                  hint: 'multiline_hint'.tr,
-                  maxLines: 3,
-                  onChanged: (v) => c.notes.value = v,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Obx(() {
-              if (c.lastError.value == null) return const SizedBox.shrink();
-              return Container(
-                padding: const EdgeInsets.all(12),
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: AppTheme.errorWithOpacity,
-                  borderRadius: BorderRadius.circular(AppTheme.radius12),
-                ),
-                child: Text(
-                  c.lastError.value!,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppTheme.error,
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Obx(() {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-            decoration: BoxDecoration(
-              color: AppTheme.white,
-              border: const Border(
-                top: BorderSide(color: AppTheme.border, width: 0.5),
-              ),
-            ),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Obx(() => Text(c.productTitle.value, style: AppTypography.h3)),
+                const SizedBox(height: 16),
+                _section(
+                  title: 'travel_dates'.tr,
                   children: [
-                    Text(
-                      'total_amount'.tr,
-                      style: AppTypography.labelSmall.copyWith(
-                        color: AppTheme.textTertiary,
+                    Obx(
+                      () => _PickerTile(
+                        icon: HugeIcons.strokeRoundedCalendarCheckIn02,
+                        label: 'start_date'.tr,
+                        value: c.startDate.value == null
+                            ? 'select_date'.tr
+                            : _fmt(c.startDate.value!),
+                        onTap: () async {
+                          final now = DateTime.now();
+                          final v = await showDatePicker(
+                            context: context,
+                            initialDate: c.startDate.value ?? now,
+                            firstDate: now,
+                            lastDate: DateTime(now.year + 2),
+                          );
+                          if (v != null) c.startDate.value = v;
+                        },
                       ),
                     ),
-                    MoneyWithIcon(
-                      money: c.total,
-                      precision: 0,
-                      textSize: 18,
-                      color: AppTheme.primary,
+                    const SizedBox(height: 8),
+                    Obx(
+                      () => _PickerTile(
+                        icon: HugeIcons.strokeRoundedCalendarCheckOut02,
+                        label: 'end_date'.tr,
+                        value: c.endDate.value == null
+                            ? 'optional'.tr
+                            : _fmt(c.endDate.value!),
+                        onTap: () async {
+                          final start = c.startDate.value ?? DateTime.now();
+                          final v = await showDatePicker(
+                            context: context,
+                            initialDate:
+                                c.endDate.value ??
+                                start.add(const Duration(days: 1)),
+                            firstDate: start,
+                            lastDate: DateTime(start.year + 2),
+                          );
+                          if (v != null) c.endDate.value = v;
+                        },
+                      ),
                     ),
                   ],
                 ),
-                const Spacer(),
-                ElevatedButton.icon(
-                  onPressed: c.isSubmitting.value
-                      ? null
-                      : () => _checkout(context, c),
-                  icon: c.isSubmitting.value
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppTheme.white,
-                          ),
-                        )
-                      : const HugeIcon(
-                          icon: HugeIcons.strokeRoundedShoppingBag01,
-                          color: AppTheme.white,
-                          size: 18,
-                        ),
-                  label: Text('confirm_pay'.tr),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 14),
-                  ),
+                const SizedBox(height: 16),
+                _section(
+                  title: 'travelers'.tr,
+                  children: [
+                    Obx(
+                      () => _CounterTile(
+                        label: 'adults'.tr,
+                        icon: HugeIcons.strokeRoundedUser,
+                        value: c.adultQty.value,
+                        min: 1,
+                        onChanged: (v) => c.adultQty.value = v,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Obx(
+                      () => _CounterTile(
+                        label: 'children'.tr,
+                        icon: HugeIcons.strokeRoundedUserCircle,
+                        value: c.childQty.value,
+                        min: 0,
+                        onChanged: (v) => c.childQty.value = v,
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 16),
+                _section(
+                  title: 'contact_details'.tr,
+                  children: [
+                    _Field(
+                      label: 'name_label'.tr,
+                      hint: 'name_hint'.tr,
+                      onChanged: (v) => c.firstName.value = v,
+                    ),
+                    _Field(
+                      label: 'last_name_label'.tr,
+                      hint: 'last_name_hint'.tr,
+                      onChanged: (v) => c.lastName.value = v,
+                    ),
+                    _Field(
+                      label: 'phone_label'.tr,
+                      hint: 'phone_hint'.tr,
+                      keyboard: TextInputType.phone,
+                      onChanged: (v) => c.phone.value = v,
+                    ),
+                    _Field(
+                      label: 'email_label'.tr,
+                      hint: 'email_hint'.tr,
+                      keyboard: TextInputType.emailAddress,
+                      onChanged: (v) => c.email.value = v,
+                    ),
+                    _Field(
+                      label: 'address'.tr,
+                      hint: 'address_hint'.tr,
+                      onChanged: (v) => c.address.value = v,
+                    ),
+                    _Field(
+                      label: 'notes'.tr,
+                      hint: 'multiline_hint'.tr,
+                      maxLines: 3,
+                      onChanged: (v) => c.notes.value = v,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Obx(() {
+                  if (c.lastError.value == null) return const SizedBox.shrink();
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.errorWithOpacity,
+                      borderRadius: BorderRadius.circular(AppTheme.radius12),
+                    ),
+                    child: Text(
+                      c.lastError.value!,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppTheme.error,
+                      ),
+                    ),
+                  );
+                }),
               ],
             ),
           ),
-        );
-      }),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Obx(() {
+              return Container(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                decoration: const BoxDecoration(
+                  color: AppTheme.white,
+                  border: Border(
+                    top: BorderSide(color: AppTheme.border, width: 0.5),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'total_amount'.tr,
+                          style: AppTypography.labelSmall.copyWith(
+                            color: AppTheme.textTertiary,
+                          ),
+                        ),
+                        MoneyWithIcon(
+                          money: c.total,
+                          precision: 0,
+                          textSize: 18,
+                          color: AppTheme.primary,
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    ElevatedButton.icon(
+                      onPressed: c.isSubmitting.value
+                          ? null
+                          : () => _checkout(context, c),
+                      icon: c.isSubmitting.value
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppTheme.white,
+                              ),
+                            )
+                          : const HugeIcon(
+                              icon: HugeIcons.strokeRoundedShoppingBag01,
+                              color: AppTheme.white,
+                              size: 18,
+                            ),
+                      label: Text('confirm_pay'.tr),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 
   Future<void> _checkout(
-      BuildContext context, BookingCreateController c) async {
+    BuildContext context,
+    BookingCreateController c,
+  ) async {
     final method = await showPaymentMethodsSheet(context);
     if (method == null) return;
     final orderId = await c.submit();
@@ -232,13 +252,13 @@ class BookingCreateScreen extends StatelessWidget {
       arguments: {'url': init.paymentUrl},
     );
     if (result == 'success') {
-      Get.offAllNamed(
-        reservationDetailRoute,
-        arguments: {'id': orderId},
-      );
+      Get.offAllNamed(reservationDetailRoute, arguments: {'id': orderId});
     } else if (result == 'failure') {
-      Get.snackbar('payment'.tr, 'payment_failed'.tr,
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'payment'.tr,
+        'payment_failed'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -253,8 +273,10 @@ class BookingCreateScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(title,
-              style: AppTypography.h5.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: AppTypography.h5.copyWith(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 12),
           ...children,
         ],
@@ -295,13 +317,19 @@ class _PickerTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(label,
-                      style: AppTypography.labelSmall.copyWith(
-                          color: AppTheme.textTertiary)),
+                  Text(
+                    label,
+                    style: AppTypography.labelSmall.copyWith(
+                      color: AppTheme.textTertiary,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(value,
-                      style: AppTypography.bodyMedium.copyWith(
-                          fontWeight: FontWeight.w700)),
+                  Text(
+                    value,
+                    style: AppTypography.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -344,9 +372,12 @@ class _CounterTile extends StatelessWidget {
           HugeIcon(icon: icon, color: AppTheme.primary, size: 20),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(label,
-                style: AppTypography.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600)),
+            child: Text(
+              label,
+              style: AppTypography.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           _CounterButton(
             icon: HugeIcons.strokeRoundedMinusSign,
@@ -411,10 +442,12 @@ class _Field extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label,
-              style: AppTypography.labelMedium.copyWith(
-                color: AppTheme.textSecondary,
-              )),
+          Text(
+            label,
+            style: AppTypography.labelMedium.copyWith(
+              color: AppTheme.textSecondary,
+            ),
+          ),
           const SizedBox(height: 4),
           TextField(
             keyboardType: keyboard,

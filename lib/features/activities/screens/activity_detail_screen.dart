@@ -23,140 +23,143 @@ class ActivityDetailScreen extends StatelessWidget {
         final a = c.activity.value;
         if (a == null) return DetailErrorView(onRetry: c.fetch);
 
-        return CustomScrollView(
-          slivers: [
-            ProductHeroSliver(imageUrl: a.imageUrl),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 6,
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 90),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProductHero(imageUrl: a.imageUrl),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (a.duration != null) DetailBadge(text: a.duration!),
-                        if (a.location != null)
-                          DetailBadge(
-                            text: a.location!,
-                            color: AppTheme.success,
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: [
+                            if (a.duration != null)
+                              DetailBadge(text: a.duration!),
+                            if (a.location != null)
+                              DetailBadge(
+                                text: a.location!,
+                                color: AppTheme.success,
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(a.title, style: AppTypography.h2),
+                        const SizedBox(height: 6),
+                        if (a.country != null)
+                          Row(
+                            children: [
+                              const HugeIcon(
+                                icon: HugeIcons.strokeRoundedLocation01,
+                                color: AppTheme.textTertiary,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                a.country!,
+                                style: AppTypography.bodyMedium.copyWith(
+                                  color: AppTheme.textSecondary,
+                                ),
+                              ),
+                            ],
                           ),
+                        const SizedBox(height: 10),
+                        DetailRatingPill(
+                          rating: a.rating,
+                          reviewsCount: a.reviewsCount,
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Text(a.title, style: AppTypography.h2),
-                    const SizedBox(height: 6),
-                    if (a.country != null)
-                      Row(
-                        children: [
-                          const HugeIcon(
-                            icon: HugeIcons.strokeRoundedLocation01,
-                            color: AppTheme.textTertiary,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            a.country!,
-                            style: AppTypography.bodyMedium.copyWith(
-                              color: AppTheme.textSecondary,
-                            ),
-                          ),
-                        ],
+                  ),
+                  if (a.description.isNotEmpty)
+                    DetailSection(
+                      title: 'description'.tr,
+                      child: HtmlWidget(
+                        a.description,
+                        textStyle: AppTypography.bodyMedium,
                       ),
-                    const SizedBox(height: 10),
-                    DetailRatingPill(
-                      rating: a.rating,
-                      reviewsCount: a.reviewsCount,
                     ),
-                  ],
+                  if (a.highlights.isNotEmpty)
+                    DetailSection(
+                      title: 'highlights'.tr,
+                      child: BulletList(
+                        items: a.highlights,
+                        hugeIcon: HugeIcons.strokeRoundedStar,
+                        iconColor: AppTheme.gold,
+                      ),
+                    ),
+                  if (a.includes.isNotEmpty)
+                    DetailSection(
+                      title: 'includes'.tr,
+                      child: BulletList(
+                        items: a.includes,
+                        hugeIcon: HugeIcons.strokeRoundedCheckmarkCircle02,
+                        iconColor: AppTheme.success,
+                      ),
+                    ),
+                  if (a.excludes.isNotEmpty)
+                    DetailSection(
+                      title: 'excludes'.tr,
+                      child: BulletList(
+                        items: a.excludes,
+                        hugeIcon: HugeIcons.strokeRoundedCancel01,
+                        iconColor: AppTheme.error,
+                      ),
+                    ),
+                  if (a.plan.isNotEmpty)
+                    DetailSection(
+                      title: 'plan'.tr,
+                      child: DetailFaqList(
+                        items: a.plan
+                            .map((p) => (title: p.title, content: p.content))
+                            .toList(),
+                      ),
+                    ),
+                  if (a.faqs.isNotEmpty)
+                    DetailSection(
+                      title: 'faqs'.tr,
+                      child: DetailFaqList(
+                        items: a.faqs
+                            .map((f) => (title: f.title, content: f.content))
+                            .toList(),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppTheme.white,
+                  border: Border(
+                    top: BorderSide(color: AppTheme.border, width: 0.5),
+                  ),
+                ),
+                child: BookNowBar(
+                  price: a.price,
+                  priceLabel: 'price_per_person'.tr,
+                  onPressed: () => Get.toNamed(
+                    bookingCreateRoute,
+                    arguments: {
+                      'product_type': 'activities',
+                      'product_id': a.id,
+                      'product_title': a.title,
+                      'unit_price': a.price,
+                    },
+                  ),
                 ),
               ),
             ),
-            if (a.description.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'description'.tr,
-                  child: HtmlWidget(
-                    a.description,
-                    textStyle: AppTypography.bodyMedium,
-                  ),
-                ),
-              ),
-            if (a.highlights.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'highlights'.tr,
-                  child: BulletList(
-                    items: a.highlights,
-                    hugeIcon: HugeIcons.strokeRoundedStar,
-                    iconColor: AppTheme.gold,
-                  ),
-                ),
-              ),
-            if (a.includes.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'includes'.tr,
-                  child: BulletList(
-                    items: a.includes,
-                    hugeIcon: HugeIcons.strokeRoundedCheckmarkCircle02,
-                    iconColor: AppTheme.success,
-                  ),
-                ),
-              ),
-            if (a.excludes.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'excludes'.tr,
-                  child: BulletList(
-                    items: a.excludes,
-                    hugeIcon: HugeIcons.strokeRoundedCancel01,
-                    iconColor: AppTheme.error,
-                  ),
-                ),
-              ),
-            if (a.plan.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'plan'.tr,
-                  child: DetailFaqList(
-                    items: a.plan
-                        .map((p) => (title: p.title, content: p.content))
-                        .toList(),
-                  ),
-                ),
-              ),
-            if (a.faqs.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'faqs'.tr,
-                  child: DetailFaqList(
-                    items: a.faqs
-                        .map((f) => (title: f.title, content: f.content))
-                        .toList(),
-                  ),
-                ),
-              ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
-        );
-      }),
-      bottomNavigationBar: Obx(() {
-        final a = c.activity.value;
-        if (a == null) return const SizedBox.shrink();
-        return BookNowBar(
-          price: a.price,
-          priceLabel: 'price_per_person'.tr,
-          onPressed: () => Get.toNamed(
-            bookingCreateRoute,
-            arguments: {
-              'product_type': 'activity',
-              'product_id': a.id,
-              'product_title': a.title,
-              'unit_price': a.price,
-            },
-          ),
         );
       }),
     );
