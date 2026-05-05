@@ -21,127 +21,141 @@ class TransportDetailScreen extends StatelessWidget {
         }
         final t = c.transport.value;
         if (t == null) return DetailErrorView(onRetry: c.fetch);
-        return CustomScrollView(
-          slivers: [
-            ProductHeroSliver(imageUrl: t.imageUrl),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 6,
+
+        return Stack(
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 90),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProductHero(imageUrl: t.imageUrl),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (t.carType != null) DetailBadge(text: t.carType!),
-                        if (t.distanceKm != null)
-                          DetailBadge(
-                            text: t.distanceKm!,
-                            color: AppTheme.success,
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: [
+                            if (t.carType != null) DetailBadge(text: t.carType!),
+                            if (t.distanceKm != null)
+                              DetailBadge(
+                                text: t.distanceKm!,
+                                color: AppTheme.success,
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(t.title, style: AppTypography.h2),
+                        const SizedBox(height: 6),
+                        if (t.location != null || t.address != null)
+                          Row(
+                            children: [
+                              const HugeIcon(
+                                icon: HugeIcons.strokeRoundedLocation01,
+                                color: AppTheme.textTertiary,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  t.address ?? t.location ?? '',
+                                  style: AppTypography.bodyMedium.copyWith(
+                                    color: AppTheme.textSecondary,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                        const SizedBox(height: 10),
+                        DetailRatingPill(
+                          rating: t.rating,
+                          reviewsCount: t.reviewsCount,
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Text(t.title, style: AppTypography.h2),
-                    const SizedBox(height: 6),
-                    if (t.location != null || t.address != null)
-                      Row(
-                        children: [
-                          const HugeIcon(
-                            icon: HugeIcons.strokeRoundedLocation01,
-                            color: AppTheme.textTertiary,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              t.address ?? t.location ?? '',
-                              style: AppTypography.bodyMedium.copyWith(
-                                color: AppTheme.textSecondary,
+                  ),
+                  if (t.pricing.isNotEmpty)
+                    DetailSection(
+                      title: 'choose_transport_mode'.tr,
+                      child: Obx(() {
+                        return Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: t.pricing.entries.map((e) {
+                            final selected = c.selectedMode.value == e.key;
+                            final price = e.value.salePrice ?? e.value.price;
+                            return ChoiceChip(
+                              label: Text(
+                                '${e.key.toUpperCase()} - ${price.toStringAsFixed(0)}',
+                                style: TextStyle(
+                                  color: selected
+                                      ? AppTheme.white
+                                      : AppTheme.textPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 10),
-                    DetailRatingPill(
-                      rating: t.rating,
-                      reviewsCount: t.reviewsCount,
+                              selected: selected,
+                              selectedColor: AppTheme.primary,
+                              backgroundColor: AppTheme.white,
+                              onSelected: (_) => c.selectedMode.value = e.key,
+                            );
+                          }).toList(),
+                        );
+                      }),
                     ),
-                  ],
-                ),
+                  if (t.description.isNotEmpty)
+                    DetailSection(
+                      title: 'description'.tr,
+                      child: Text(
+                        t.description,
+                        style: AppTypography.bodyMedium,
+                      ),
+                    ),
+                  if (t.faqs.isNotEmpty)
+                    DetailSection(
+                      title: 'faqs'.tr,
+                      child: DetailFaqList(
+                        items: t.faqs
+                            .map((f) => (title: f.title, content: f.content))
+                            .toList(),
+                      ),
+                    ),
+                ],
               ),
             ),
-            if (t.pricing.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'choose_transport_mode'.tr,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: t.pricing.entries.map((e) {
-                      return Obx(() {
-                        final selected = c.selectedMode.value == e.key;
-                        final price = e.value.salePrice ?? e.value.price;
-                        return ChoiceChip(
-                          label: Text(
-                            '${e.key.toUpperCase()} - ${price.toStringAsFixed(0)}',
-                            style: TextStyle(
-                              color: selected
-                                  ? AppTheme.white
-                                  : AppTheme.textPrimary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          selected: selected,
-                          selectedColor: AppTheme.primary,
-                          backgroundColor: AppTheme.white,
-                          onSelected: (_) => c.selectedMode.value = e.key,
-                        );
-                      });
-                    }).toList(),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Obx(() {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: AppTheme.white,
+                    border: Border(
+                      top: BorderSide(color: AppTheme.border, width: 0.5),
+                    ),
                   ),
-                ),
-              ),
-            if (t.description.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'description'.tr,
-                  child: Text(t.description, style: AppTypography.bodyMedium),
-                ),
-              ),
-            if (t.faqs.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'faqs'.tr,
-                  child: DetailFaqList(
-                    items: t.faqs
-                        .map((f) => (title: f.title, content: f.content))
-                        .toList(),
+                  child: BookNowBar(
+                    price: c.currentPrice(),
+                    priceLabel: 'starting_from'.tr,
+                    onPressed: () => Get.toNamed(
+                      bookingCreateRoute,
+                      arguments: {
+                        'product_type': 'transports',
+                        'product_id': t.id,
+                        'product_title': t.title,
+                        'unit_price': c.currentPrice(),
+                        'transport_type': c.selectedMode.value,
+                      },
+                    ),
                   ),
-                ),
-              ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
+                );
+              }),
+            ),
           ],
-        );
-      }),
-      bottomNavigationBar: Obx(() {
-        final t = c.transport.value;
-        if (t == null) return const SizedBox.shrink();
-        return BookNowBar(
-          price: c.currentPrice(),
-          priceLabel: 'starting_from'.tr,
-          onPressed: () => Get.toNamed(
-            bookingCreateRoute,
-            arguments: {
-              'product_type': 'transport',
-              'product_id': t.id,
-              'product_title': t.title,
-              'unit_price': c.currentPrice(),
-              'transport_type': c.selectedMode.value,
-            },
-          ),
         );
       }),
     );

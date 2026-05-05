@@ -426,50 +426,48 @@ class StartJourneyBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-        child: price == null
-            ? SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+      child: price == null
+          ? SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onPressed,
+                child: Text(
+                  buttonLabel.isEmpty ? 'start_journey'.tr : buttonLabel,
+                ),
+              ),
+            )
+          : Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (priceLabel != null)
+                      Text(
+                        priceLabel!,
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppTheme.textTertiary,
+                        ),
+                      ),
+                    MoneyWithIcon(
+                      money: price!,
+                      precision: 0,
+                      textSize: 20,
+                      color: AppTheme.primary,
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                ElevatedButton(
                   onPressed: onPressed,
                   child: Text(
                     buttonLabel.isEmpty ? 'start_journey'.tr : buttonLabel,
                   ),
                 ),
-              )
-            : Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (priceLabel != null)
-                        Text(
-                          priceLabel!,
-                          style: AppTypography.labelSmall.copyWith(
-                            color: AppTheme.textTertiary,
-                          ),
-                        ),
-                      MoneyWithIcon(
-                        money: price!,
-                        precision: 0,
-                        textSize: 20,
-                        color: AppTheme.primary,
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: onPressed,
-                    child: Text(
-                      buttonLabel.isEmpty ? 'start_journey'.tr : buttonLabel,
-                    ),
-                  ),
-                ],
-              ),
-      ),
+              ],
+            ),
     );
   }
 }
