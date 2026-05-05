@@ -18,6 +18,8 @@ class _HomePromoSectionState extends State<HomePromoSection> {
   final _controller = PageController(viewportFraction: 0.92);
   int _index = 0;
 
+  static const double _bannerHeight = 160;
+
   @override
   void dispose() {
     _controller.dispose();
@@ -32,78 +34,128 @@ class _HomePromoSectionState extends State<HomePromoSection> {
       children: [
         HomeSectionHeader(title: 'special_offers'.tr),
         SizedBox(
-          height: 160,
+          height: _bannerHeight,
           child: PageView.builder(
             controller: _controller,
             itemCount: widget.banners.length,
             onPageChanged: (i) => setState(() => _index = i),
-            itemBuilder: (_, i) {
-              final b = widget.banners[i];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppTheme.radius24),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      AppCachedImage(imageUrl: b.imageUrl, fit: BoxFit.cover),
-                      const DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [Color(0xCC1750BF), Color(0x331750BF)],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (b.title.isNotEmpty)
-                              Text(
-                                b.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTypography.h3.copyWith(
-                                  color: AppTheme.white,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+            itemBuilder: (_, i) => _PromoCard(banner: widget.banners[i]),
           ),
         ),
         if (widget.banners.length > 1) ...[
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(widget.banners.length, (i) {
-              final selected = i == _index;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                width: selected ? 18 : 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  color: selected
-                      ? AppTheme.primary
-                      : AppTheme.primary.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              );
-            }),
-          ),
+          const SizedBox(height: AppTheme.spacing12),
+          _PageIndicator(count: widget.banners.length, activeIndex: _index),
         ],
       ],
+    );
+  }
+}
+
+class _PromoCard extends StatelessWidget {
+  final HomeBanner banner;
+  const _PromoCard({required this.banner});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing8),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppTheme.radius20),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            AppCachedImage(imageUrl: banner.imageUrl, fit: BoxFit.cover),
+            const _BannerOverlay(),
+            if (banner.title.isNotEmpty) _BannerTitle(title: banner.title),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BannerOverlay extends StatelessWidget {
+  const _BannerOverlay();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            AppTheme.primary.withValues(alpha: 0.8),
+            AppTheme.primary.withValues(alpha: 0.2),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BannerTitle extends StatelessWidget {
+  final String title;
+  const _BannerTitle({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.spacing20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.h3.copyWith(
+              color: AppTheme.white,
+              fontWeight: AppTypography.extraBold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PageIndicator extends StatelessWidget {
+  final int count;
+  final int activeIndex;
+
+  const _PageIndicator({required this.count, required this.activeIndex});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        count,
+        (i) => _IndicatorDot(active: i == activeIndex),
+      ),
+    );
+  }
+}
+
+class _IndicatorDot extends StatelessWidget {
+  final bool active;
+  const _IndicatorDot({required this.active});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      margin: const EdgeInsets.symmetric(horizontal: 3),
+      width: active ? 18 : 6,
+      height: 6,
+      decoration: BoxDecoration(
+        color: active
+            ? AppTheme.primary
+            : AppTheme.primary.withValues(alpha: 0.25),
+        borderRadius: BorderRadius.circular(3),
+      ),
     );
   }
 }
