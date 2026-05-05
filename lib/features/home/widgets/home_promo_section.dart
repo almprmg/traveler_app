@@ -65,28 +65,7 @@ class _PromoCard extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             AppCachedImage(imageUrl: banner.imageUrl, fit: BoxFit.cover),
-            const _BannerOverlay(),
             if (banner.title.isNotEmpty) _BannerTitle(title: banner.title),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BannerOverlay extends StatelessWidget {
-  const _BannerOverlay();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            AppTheme.primary.withValues(alpha: 0.8),
-            AppTheme.primary.withValues(alpha: 0.2),
           ],
         ),
       ),
@@ -100,22 +79,30 @@ class _BannerTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppTheme.spacing20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
+    return Align(
+      alignment: AlignmentDirectional.topEnd,
+      child: Padding(
+        padding: const EdgeInsets.all(AppTheme.spacing12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.spacing8,
+            vertical: AppTheme.spacing4,
+          ),
+          decoration: BoxDecoration(
+            color: AppTheme.white.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(AppTheme.radiusPill),
+            border: Border.all(color: AppTheme.cardBorder, width: 0.5),
+          ),
+          child: Text(
             title,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppTypography.h3.copyWith(
-              color: AppTheme.white,
-              fontWeight: AppTypography.extraBold,
+            style: AppTypography.labelSmall.copyWith(
+              color: AppTheme.textPrimary,
+              fontWeight: AppTypography.semiBold,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
