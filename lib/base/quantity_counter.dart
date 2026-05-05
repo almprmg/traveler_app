@@ -173,7 +173,7 @@ class _QuantityCounterState extends State<QuantityCounter> {
         decoration: BoxDecoration(
           color: AppTheme.background,
           borderRadius: BorderRadius.circular(AppTheme.radius8),
-          border: Border.all(color: AppTheme.border),
+          border: Border.all(color: AppTheme.cardBorder, width: 1),
         ),
         alignment: Alignment.center,
         child: widget.isLoading
@@ -210,7 +210,7 @@ class _QuantityCounterState extends State<QuantityCounter> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(AppTheme.radius8),
-          border: Border.all(color: AppTheme.border, width: 0.5),
+          border: Border.all(color: AppTheme.cardBorder, width: 1),
         ),
         padding: EdgeInsets.symmetric(horizontal: cfg.displayPadding),
         child: widget.isLoading

@@ -295,9 +295,24 @@ class _CustomInputFieldState extends State<CustomInputField> {
     // Check for custom widget from config first
     if (_config.prefixWidget != null) return _config.prefixWidget;
 
-    final icon = widget.prefixIcon ?? _config.prefixIcon;
-    if (icon == null) return null;
-    return Icon(icon, color: AppTheme.textTertiary, size: 20);
+    final mat = widget.prefixIcon ?? _config.prefixIcon;
+    if (mat == null) return null;
+    final huge = _materialToHuge(mat);
+    if (huge != null) {
+      return HugeIcon(icon: huge, color: AppTheme.textTertiary, size: 20);
+    }
+    return Icon(mat, color: AppTheme.textTertiary, size: 20);
+  }
+
+  static List<List<dynamic>>? _materialToHuge(IconData icon) {
+    if (icon == Icons.lock_outline) return HugeIcons.strokeRoundedLockKey;
+    if (icon == Icons.phone_outlined) {
+      return HugeIcons.strokeRoundedSmartPhone01;
+    }
+    if (icon == Icons.email_outlined) return HugeIcons.strokeRoundedMail01;
+    if (icon == Icons.person_outline) return HugeIcons.strokeRoundedUser;
+    if (icon == Icons.search) return HugeIcons.strokeRoundedSearch01;
+    return null;
   }
 
   Widget? get _suffixIcon {

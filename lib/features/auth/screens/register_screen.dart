@@ -5,6 +5,7 @@ import 'package:traveler_app/base/app_text_field.dart';
 import 'package:traveler_app/features/auth/controller/auth_register_controller.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -38,7 +39,7 @@ class RegisterScreen extends StatelessWidget {
                   controller: c.nameController,
                   labelText: 'name_label'.tr,
                   hintText: 'name_hint'.tr,
-                  prefixIcon: const Icon(Icons.person_outline, size: 20),
+                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedUser, size: 20),
                   validator: (v) =>
                       (v == null || v.isEmpty) ? 'name_required'.tr : null,
                 ),
@@ -48,7 +49,7 @@ class RegisterScreen extends StatelessWidget {
                   labelText: 'email_label'.tr,
                   hintText: 'email_hint'.tr,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedMail01, size: 20),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'email_required'.tr;
                     if (!GetUtils.isEmail(v)) return 'email_invalid'.tr;
@@ -61,7 +62,7 @@ class RegisterScreen extends StatelessWidget {
                   labelText: 'phone_label'.tr,
                   hintText: 'phone_hint'.tr,
                   keyboardType: TextInputType.phone,
-                  prefixIcon: const Icon(Icons.phone_outlined, size: 20),
+                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedSmartPhone01, size: 20),
                   validator: (v) =>
                       (v == null || v.isEmpty) ? 'phone_required'.tr : null,
                 ),
@@ -72,14 +73,9 @@ class RegisterScreen extends StatelessWidget {
                     labelText: 'password_label'.tr,
                     hintText: 'password_hint'.tr,
                     obscureText: c.obscurePassword.value,
-                    prefixIcon: const Icon(Icons.lock_outline, size: 20),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        c.obscurePassword.value
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20,
-                      ),
+                    prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedLockKey, size: 20),
+                    suffixIcon: IconButton(icon: HugeIcon(icon: c.obscurePassword.value
+                             ? HugeIcons.strokeRoundedView : HugeIcons.strokeRoundedViewOff, size: 20),
                       onPressed: () =>
                           c.obscurePassword.value = !c.obscurePassword.value,
                     ),
@@ -97,14 +93,9 @@ class RegisterScreen extends StatelessWidget {
                     labelText: 'confirm_password_label'.tr,
                     hintText: 'confirm_password_hint'.tr,
                     obscureText: c.obscureConfirm.value,
-                    prefixIcon: const Icon(Icons.lock_outline, size: 20),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        c.obscureConfirm.value
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20,
-                      ),
+                    prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedLockKey, size: 20),
+                    suffixIcon: IconButton(icon: HugeIcon(icon: c.obscureConfirm.value
+                             ? HugeIcons.strokeRoundedView : HugeIcons.strokeRoundedViewOff, size: 20),
                       onPressed: () =>
                           c.obscureConfirm.value = !c.obscureConfirm.value,
                     ),

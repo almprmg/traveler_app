@@ -3,6 +3,7 @@ import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/tours/model/tour_model.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class TourCard extends StatelessWidget {
   final TourListItem tour;
@@ -18,7 +19,6 @@ class TourCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppTheme.white,
           borderRadius: BorderRadius.circular(AppTheme.radius16),
-          boxShadow: AppTheme.lightShadow,
         ),
         child: Row(
           children: [
@@ -73,8 +73,7 @@ class TourCard extends StatelessWidget {
                     if (tour.location != null)
                       Row(
                         children: [
-                          const Icon(Icons.location_on_outlined,
-                              size: 13, color: AppTheme.textTertiary),
+                          const HugeIcon(icon: HugeIcons.strokeRoundedLocation01, size: 13, color: AppTheme.textTertiary),
                           const SizedBox(width: 2),
                           Expanded(
                             child: Text(
@@ -92,8 +91,7 @@ class TourCard extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(Icons.star_rounded,
-                            size: 14, color: AppTheme.gold),
+                        const HugeIcon(icon: HugeIcons.strokeRoundedStar, size: 14, color: AppTheme.gold),
                         const SizedBox(width: 2),
                         Text(
                           tour.rating.toStringAsFixed(1),

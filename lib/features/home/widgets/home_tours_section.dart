@@ -5,6 +5,7 @@ import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/home/model/home_model.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class HomeToursSection extends StatelessWidget {
   final List<Tour> tours;
@@ -33,7 +34,6 @@ class HomeToursSection extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppTheme.white,
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: AppTheme.lightShadow,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,8 +75,7 @@ class HomeToursSection extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                const Icon(Icons.star_rounded,
-                                    size: 12, color: AppTheme.gold),
+                                const HugeIcon(icon: HugeIcons.strokeRoundedStar, size: 12, color: AppTheme.gold),
                                 const SizedBox(width: 2),
                                 Text(
                                   t.rating.toStringAsFixed(1),

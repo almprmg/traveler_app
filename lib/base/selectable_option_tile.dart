@@ -113,8 +113,8 @@ class _RadioDot extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ).createShader(bounds),
-              child: const Icon(
-                Icons.radio_button_checked,
+              child: const HugeIcon(
+                icon: HugeIcons.strokeRoundedRadioButton,
                 size: 22,
                 color: Colors.white,
               ),

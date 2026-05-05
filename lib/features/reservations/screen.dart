@@ -8,6 +8,7 @@ import 'package:traveler_app/features/reservations/model/reservation_model.dart'
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class ReservationsScreen extends StatefulWidget {
   const ReservationsScreen({super.key});
@@ -87,7 +88,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.lock_outline, size: 64, color: AppTheme.textTertiary),
+            HugeIcon(icon: HugeIcons.strokeRoundedLockKey, size: 64, color: AppTheme.textTertiary),
             const SizedBox(height: 16),
             Text(
               'login_to_view_reservations'.tr,
@@ -157,7 +158,7 @@ class _ReservationCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppTheme.white,
           borderRadius: BorderRadius.circular(AppTheme.radius12),
-          border: Border.all(color: AppTheme.border),
+          border: Border.all(color: AppTheme.cardBorder, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

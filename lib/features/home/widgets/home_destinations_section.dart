@@ -23,8 +23,8 @@ class HomeDestinationsSection extends StatelessWidget {
           final d = destinations[i];
           return GestureDetector(
             onTap: () => Get.toNamed(
-              toursRoute,
-              arguments: {'destinationSlug': d.slug, 'destinationName': d.name},
+              destinationDetailRoute,
+              arguments: {'slug': d.slug, 'destination_name': d.name},
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6),

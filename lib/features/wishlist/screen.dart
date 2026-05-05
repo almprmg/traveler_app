@@ -7,6 +7,7 @@ import 'package:traveler_app/data/api/api_client.dart';
 import 'package:traveler_app/util/app_constants.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -70,7 +71,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           color: AppTheme.white,
                           borderRadius:
                               BorderRadius.circular(AppTheme.radius12),
-                          border: Border.all(color: AppTheme.border),
+                          border: Border.all(color: AppTheme.cardBorder, width: 1),
                         ),
                         child: Row(
                           children: [
@@ -104,8 +105,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.favorite,
-                                  color: Colors.red),
+                              icon: const HugeIcon(icon: HugeIcons.strokeRoundedFavourite, color: Colors.red),
                               onPressed: () => _remove(type, id),
                             ),
                           ],

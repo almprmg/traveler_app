@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/app_button.dart';
 import 'package:traveler_app/base/money_icon.dart';
+import 'package:traveler_app/features/payments/screens/payment_methods_sheet.dart';
+import 'package:traveler_app/features/payments/service/payments_service.dart';
 import 'package:traveler_app/features/reservations/model/reservation_model.dart';
 import 'package:traveler_app/features/reservations/service/reservations_service.dart';
+import 'package:traveler_app/features/reviews/widgets/review_sheet.dart';
+import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReservationDetailScreen extends StatefulWidget {
   const ReservationDetailScreen({super.key});
@@ -78,8 +84,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.error_outline,
-                          size: 48, color: Colors.grey),
+                      const HugeIcon(icon: HugeIcons.strokeRoundedAlert02, size: 48, color: Colors.grey),
                       const SizedBox(height: 12),
                       Text('failed_to_load'.tr),
                       TextButton(
@@ -133,17 +138,8 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
                             style: AppTypography.bodyMedium.copyWith(
                                 color: AppTheme.textSecondary)),
                       ],
-                      if (_detail!.status.toLowerCase() == 'pending' ||
-                          _detail!.status.toLowerCase() == 'confirmed') ...[
-                        const SizedBox(height: 24),
-                        AppButton(
-                          text: 'cancel_booking'.tr,
-                          onPressed: _isCancelling ? null : _cancel,
-                          isLoading: _isCancelling,
-                          type: ButtonType.danger,
-                          width: double.infinity,
-                        ),
-                      ],
+                      const SizedBox(height: 24),
+                      _buildActionButtons(),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -158,7 +154,7 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
       decoration: BoxDecoration(
         color: AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radius12),
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: AppTheme.cardBorder, width: 1),
       ),
       child: Column(
         children: rows
@@ -231,6 +227,117 @@ class _ReservationDetailScreenState extends State<ReservationDetailScreen> {
         return AppTheme.error;
       default:
         return AppTheme.warning;
+    }
+  }
+
+  Widget _buildActionButtons() {
+    final d = _detail!;
+    final status = d.status.toLowerCase();
+    final paymentStatus = (d.paymentStatus ?? '').toLowerCase();
+    final isUnpaid = paymentStatus == 'unpaid' || paymentStatus == 'pending';
+    final canCancel = status == 'pending' || status == 'confirmed' ||
+        status == 'upcoming';
+    final canReview = status == 'completed';
+
+    return Column(
+      children: [
+        if (isUnpaid)
+          AppButton(
+            text: 'pay_now'.tr,
+            onPressed: _payNow,
+            type: ButtonType.primary,
+            width: double.infinity,
+          ),
+        if (isUnpaid) const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: _viewInvoice,
+                icon: const HugeIcon(
+                  icon: HugeIcons.strokeRoundedInvoice03,
+                  color: AppTheme.primary,
+                  size: 18,
+                ),
+                label: Text('view_invoice'.tr),
+              ),
+            ),
+            if (canReview) ...[
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _openReview,
+                  icon: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedStar,
+                    color: AppTheme.gold,
+                    size: 18,
+                  ),
+                  label: Text('write_review'.tr),
+                ),
+              ),
+            ],
+          ],
+        ),
+        if (canCancel) ...[
+          const SizedBox(height: 12),
+          AppButton(
+            text: 'cancel_booking'.tr,
+            onPressed: _isCancelling ? null : _cancel,
+            isLoading: _isCancelling,
+            type: ButtonType.danger,
+            width: double.infinity,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Future<void> _payNow() async {
+    final method = await showPaymentMethodsSheet(context);
+    if (method == null) return;
+    final init = await Get.find<PaymentsService>().initiate(
+      orderId: _detail!.id,
+      methodKey: method.key,
+    );
+    if (init == null) {
+      Get.snackbar('payment'.tr, 'payment_init_failed'.tr,
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+    final result = await Get.toNamed(
+      paymentWebViewRoute,
+      arguments: {'url': init.paymentUrl},
+    );
+    if (result == 'success') {
+      _fetch();
+    } else if (result == 'failure') {
+      Get.snackbar('payment'.tr, 'payment_failed'.tr,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> _viewInvoice() async {
+    final url =
+        await Get.find<ReservationsService>().getInvoiceUrl(_detail!.id);
+    if (url == null) {
+      Get.snackbar('invoice'.tr, 'invoice_unavailable'.tr,
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  Future<void> _openReview() async {
+    final ok = await showReviewSheet(
+      context,
+      productType: _detail!.productType,
+      productId: _detail!.productId,
+    );
+    if (ok) {
+      Get.snackbar('reviews'.tr, 'review_submitted'.tr,
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

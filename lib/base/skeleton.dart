@@ -121,7 +121,7 @@ class SkeletonCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radius12),
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: AppTheme.cardBorder, width: 1),
       ),
       child: child,
     );

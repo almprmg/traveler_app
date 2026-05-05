@@ -337,7 +337,7 @@ class _PickLocationScreenState extends State<PickLocationScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: AppTheme.border),
+          border: Border.all(color: AppTheme.cardBorder, width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

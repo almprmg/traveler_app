@@ -5,6 +5,7 @@ import 'package:traveler_app/base/app_text_field.dart';
 import 'package:traveler_app/features/auth/controller/auth_forgot_controller.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -39,7 +40,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   labelText: 'email_label'.tr,
                   hintText: 'email_hint'.tr,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedMail01, size: 20),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'email_required'.tr;
                     if (!GetUtils.isEmail(v)) return 'email_invalid'.tr;

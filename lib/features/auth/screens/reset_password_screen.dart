@@ -5,6 +5,7 @@ import 'package:traveler_app/base/app_text_field.dart';
 import 'package:traveler_app/features/auth/controller/auth_reset_controller.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   const ResetPasswordScreen({super.key});
@@ -40,14 +41,9 @@ class ResetPasswordScreen extends StatelessWidget {
                     labelText: 'password_label'.tr,
                     hintText: 'password_hint'.tr,
                     obscureText: c.obscurePassword.value,
-                    prefixIcon: const Icon(Icons.lock_outline, size: 20),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        c.obscurePassword.value
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20,
-                      ),
+                    prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedLockKey, size: 20),
+                    suffixIcon: IconButton(icon: HugeIcon(icon: c.obscurePassword.value
+                             ? HugeIcons.strokeRoundedView : HugeIcons.strokeRoundedViewOff, size: 20),
                       onPressed: () =>
                           c.obscurePassword.value = !c.obscurePassword.value,
                     ),
@@ -65,14 +61,9 @@ class ResetPasswordScreen extends StatelessWidget {
                     labelText: 'confirm_password_label'.tr,
                     hintText: 'confirm_password_hint'.tr,
                     obscureText: c.obscureConfirm.value,
-                    prefixIcon: const Icon(Icons.lock_outline, size: 20),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        c.obscureConfirm.value
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20,
-                      ),
+                    prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedLockKey, size: 20),
+                    suffixIcon: IconButton(icon: HugeIcon(icon: c.obscureConfirm.value
+                             ? HugeIcons.strokeRoundedView : HugeIcons.strokeRoundedViewOff, size: 20),
                       onPressed: () =>
                           c.obscureConfirm.value = !c.obscureConfirm.value,
                     ),

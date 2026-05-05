@@ -83,6 +83,22 @@ class AppConstants {
   static const String walletTransactionsUrl = '${apiUrl}wallet/transactions';
   static const String walletDepositUrl = '${apiUrl}wallet/deposit';
 
+  // eSIM
+  static const String esimCountriesUrl = '${apiUrl}esim/countries';
+  static const String esimRegionsUrl = '${apiUrl}esim/regions';
+  static const String esimPackagesUrl = '${apiUrl}esim/packages';
+  static String esimPackageDetailUrl(String id) =>
+      '${apiUrl}esim/packages/$id';
+  static const String esimCheckoutUrl = '${apiUrl}esim/checkout';
+  static const String esimProfilesUrl = '${apiUrl}esim/profiles';
+  static String esimProfileDetailUrl(String iccid) =>
+      '${apiUrl}esim/profiles/$iccid';
+  static String esimProfileRefreshUrl(String iccid) =>
+      '${apiUrl}esim/profiles/$iccid/refresh-usage';
+  static const String esimOrdersUrl = '${apiUrl}esim/orders';
+  static String esimOrderDetailUrl(String orderNumber) =>
+      '${apiUrl}esim/orders/$orderNumber';
+
   // Storage
   static const String generalStorageUrl = '${apiUrl}general/storage/';
   static const String uploadFileUri =

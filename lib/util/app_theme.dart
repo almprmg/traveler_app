@@ -13,9 +13,11 @@ class AppTheme {
   static const Color secondaryLight = Color(0xFF94A3B8);
   static const Color secondaryDark = Color(0xFF475569);
 
-  static const Color background = Color(0xFFF8F8F8);
-  static const Color backgroundLight = Color(0xFFFAFAFA);
-  static const Color backgroundDark = Color(0xFFEEEEEE);
+  static const Color background = Color(0xFFF1F7FF);
+  static const Color backgroundLight = Color(0xFFF7FAFE);
+  static const Color backgroundDark = Color(0xFFE7F0FB);
+  static const Color skyTop = Color(0xFFE8F2FE);
+  static const Color skyBottom = Color(0xFFD6E7FB);
 
   static const Color textPrimary = Color(0xFF0F172A);
   static const Color textSecondary = Color(0xFF475569);
@@ -35,10 +37,10 @@ class AppTheme {
   static const Color shimmerHighlight = Color(0xFFF4F4F4);
 
   static const Color white = Color(0xFFFFFFFF);
-  static const Color shadow = Color(0x1A000000);
-  static List<BoxShadow> get lightShadow => [
-    BoxShadow(color: shadow, blurRadius: 10, offset: const Offset(0, 4)),
-  ];
+  static const Color shadow = Color(0x00000000);
+  // Shadows removed across the app for a flat, modern look.
+  static List<BoxShadow> get lightShadow => const [];
+  static const Color cardBorder = Color(0xFFE6EEF8);
 
   static const Color gold = Color(0xFFB58E2E);
   static const Color deepBlue = Color(0xFF1E40AF);
@@ -60,6 +62,7 @@ class AppTheme {
   static const double radius16 = 16.0;
   static const double radius20 = 20.0;
   static const double radius24 = 24.0;
+  static const double radiusPill = 999.0;
 
   static const SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.white,
@@ -113,31 +116,33 @@ class AppTheme {
           foregroundColor: textOnPrimary,
           textStyle: AppTypography.buttonMedium.copyWith(
             fontFamily: fontFamily,
+            fontWeight: FontWeight.w700,
           ),
-          elevation: 2,
+          elevation: 0,
           padding: const EdgeInsets.symmetric(
-            horizontal: spacing24,
-            vertical: spacing12,
+            horizontal: spacing32,
+            vertical: spacing16,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius8),
+            borderRadius: BorderRadius.circular(radiusPill),
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: primary,
-          backgroundColor: backgroundLight,
+          backgroundColor: white,
           textStyle: AppTypography.buttonMedium.copyWith(
             fontFamily: fontFamily,
+            fontWeight: FontWeight.w700,
           ),
-          side: const BorderSide(color: border, width: 1.5),
+          side: const BorderSide(color: cardBorder, width: 1),
           padding: const EdgeInsets.symmetric(
             horizontal: spacing24,
             vertical: spacing12,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius8),
+            borderRadius: BorderRadius.circular(radiusPill),
           ),
         ),
       ),
@@ -162,41 +167,41 @@ class AppTheme {
         helperStyle: AppTypography.labelSmall,
         errorStyle: AppTypography.withColor(AppTypography.labelSmall, error),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius12),
-          borderSide: const BorderSide(color: border, width: 0.5),
+          borderRadius: BorderRadius.circular(radiusPill),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius12),
-          borderSide: const BorderSide(color: border, width: 0.5),
+          borderRadius: BorderRadius.circular(radiusPill),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius12),
-          borderSide: const BorderSide(color: primary, width: 1.5),
+          borderRadius: BorderRadius.circular(radiusPill),
+          borderSide: const BorderSide(color: primary, width: 1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius12),
-          borderSide: const BorderSide(color: error, width: 0.5),
+          borderRadius: BorderRadius.circular(radiusPill),
+          borderSide: const BorderSide(color: error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius12),
+          borderRadius: BorderRadius.circular(radiusPill),
           borderSide: const BorderSide(color: error, width: 1.5),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: spacing16,
-          vertical: spacing12,
+          horizontal: spacing20,
+          vertical: spacing16,
         ),
         filled: true,
         fillColor: white,
       ),
       cardTheme: CardThemeData(
-        elevation: 1,
-        shadowColor: shadow,
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius12),
-          side: const BorderSide(color: border, width: 0.5),
+          borderRadius: BorderRadius.circular(radius20),
+          side: const BorderSide(color: cardBorder, width: 1),
         ),
         margin: const EdgeInsets.symmetric(vertical: spacing4, horizontal: 0),
-        color: backgroundLight,
+        color: white,
       ),
       listTileTheme: ListTileThemeData(
         titleTextStyle: AppTypography.h5,
@@ -330,21 +335,14 @@ class AppTheme {
     colors: [backgroundLight, background],
   );
 
-  static List<BoxShadow> get mediumShadow => [
-    BoxShadow(
-      color: Colors.black.withValues(alpha: 0.1),
-      blurRadius: 8,
-      offset: const Offset(0, 4),
-    ),
-  ];
+  static List<BoxShadow> get mediumShadow => const [];
+  static List<BoxShadow> get heavyShadow => const [];
 
-  static List<BoxShadow> get heavyShadow => [
-    BoxShadow(
-      color: Colors.black.withValues(alpha: 0.15),
-      blurRadius: 16,
-      offset: const Offset(0, 8),
-    ),
-  ];
+  static LinearGradient get skyGradient => const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [skyTop, skyBottom],
+      );
 }
 
 class AppScreenWrapper extends StatelessWidget {

@@ -5,7 +5,9 @@ import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/hotels/controller/hotel_detail_controller.dart';
 import 'package:traveler_app/features/hotels/model/hotel_model.dart';
+import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class HotelDetailScreen extends StatelessWidget {
   const HotelDetailScreen({super.key});
@@ -25,7 +27,7 @@ class HotelDetailScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+                const HugeIcon(icon: HugeIcons.strokeRoundedAlert02, size: 48, color: Colors.grey),
                 const SizedBox(height: 12),
                 Text('failed_to_load'.tr),
                 TextButton(onPressed: c.fetch, child: Text('retry'.tr)),
@@ -104,7 +106,6 @@ class HotelDetailScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           decoration: BoxDecoration(
             color: AppTheme.white,
-            boxShadow: AppTheme.mediumShadow,
           ),
           child: Row(
             children: [
@@ -126,7 +127,15 @@ class HotelDetailScreen extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Get.toNamed(
+                    bookingCreateRoute,
+                    arguments: {
+                      'product_type': 'hotel',
+                      'product_id': c.hotel.value!.id,
+                      'product_title': c.hotel.value!.name,
+                      'unit_price': c.hotel.value!.pricePerNight,
+                    },
+                  ),
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48)),
                   child: Text('book_now'.tr),
@@ -159,8 +168,7 @@ class HotelDetailScreen extends StatelessWidget {
     if (parts.isEmpty) return const SizedBox.shrink();
     return Row(
       children: [
-        const Icon(Icons.location_on_outlined,
-            size: 16, color: AppTheme.textSecondary),
+        const HugeIcon(icon: HugeIcons.strokeRoundedLocation01, size: 16, color: AppTheme.textSecondary),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
@@ -175,7 +183,7 @@ class HotelDetailScreen extends StatelessWidget {
   Widget _buildRatingRow(HotelDetail hotel) {
     return Row(
       children: [
-        const Icon(Icons.star_rounded, size: 18, color: AppTheme.gold),
+        const HugeIcon(icon: HugeIcons.strokeRoundedStar, size: 18, color: AppTheme.gold),
         const SizedBox(width: 4),
         Text(
           '${hotel.rating.toStringAsFixed(1)} (${hotel.reviewsCount})',
@@ -218,12 +226,12 @@ class _PolicyTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radius12),
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: AppTheme.cardBorder, width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.info_outline, size: 18, color: AppTheme.primary),
+          const HugeIcon(icon: HugeIcons.strokeRoundedInformationCircle, size: 18, color: AppTheme.primary),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -257,7 +265,7 @@ class _ReviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radius12),
-        border: Border.all(color: AppTheme.border),
+        border: Border.all(color: AppTheme.cardBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,8 +290,7 @@ class _ReviewCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const Icon(Icons.star_rounded,
-                      size: 14, color: AppTheme.gold),
+                  const HugeIcon(icon: HugeIcons.strokeRoundedStar, size: 14, color: AppTheme.gold),
                   const SizedBox(width: 2),
                   Text(review.rating.toStringAsFixed(1),
                       style: const TextStyle(

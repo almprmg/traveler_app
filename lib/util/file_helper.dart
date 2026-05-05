@@ -255,7 +255,7 @@ class FileHelper {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(AppTheme.radius12),
-            border: Border.all(color: AppTheme.border),
+            border: Border.all(color: AppTheme.cardBorder, width: 1),
           ),
           child: Row(
             children: [
@@ -264,7 +264,7 @@ class FileHelper {
                 height: 48,
                 decoration: BoxDecoration(
                   color: AppTheme.background,
-                  border: Border.all(color: AppTheme.border),
+                  border: Border.all(color: AppTheme.cardBorder, width: 1),
                   borderRadius: BorderRadius.circular(AppTheme.radius12),
                 ),
                 child: HugeIcon(

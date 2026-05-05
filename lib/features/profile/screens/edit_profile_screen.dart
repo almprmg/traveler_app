@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:traveler_app/features/profile/controller/profile_controller.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -47,7 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   labelText: 'name_label'.tr,
-                  prefixIcon: const Icon(Icons.person_outline),
+                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedUser),
                 ),
                 validator: (v) =>
                     (v == null || v.isEmpty) ? 'name_required'.tr : null,
@@ -58,7 +59,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   labelText: 'phone_label'.tr,
-                  prefixIcon: const Icon(Icons.phone_outlined),
+                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedSmartPhone01),
                 ),
                 validator: (v) =>
                     (v == null || v.isEmpty) ? 'phone_required'.tr : null,

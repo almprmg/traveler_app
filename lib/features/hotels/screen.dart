@@ -5,6 +5,7 @@ import 'package:traveler_app/features/hotels/controller/hotels_controller.dart';
 import 'package:traveler_app/features/hotels/widgets/hotel_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class HotelsScreen extends StatefulWidget {
   const HotelsScreen({super.key});
@@ -32,7 +33,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
         title: Text('hotels'.tr),
         actions: [
           IconButton(
-            icon: const Icon(Icons.tune_outlined),
+            icon: const HugeIcon(icon: HugeIcons.strokeRoundedFilterHorizontal),
             onPressed: () => _showFilters(context),
           ),
         ],
@@ -45,7 +46,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
               onChanged: _c.search,
               decoration: InputDecoration(
                 hintText: 'search_hint'.tr,
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedSearch01),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
             ),

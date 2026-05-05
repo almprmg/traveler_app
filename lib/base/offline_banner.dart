@@ -81,7 +81,7 @@ class _OfflineCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppTheme.white.withValues(alpha: 0.7),
             borderRadius: BorderRadius.circular(AppTheme.radius16),
-            border: Border.all(color: AppTheme.border),
+            border: Border.all(color: AppTheme.cardBorder, width: 1),
           ),
           child: Row(
             children: [

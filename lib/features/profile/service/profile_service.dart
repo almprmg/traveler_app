@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:traveler_app/data/api/api_client.dart';
 import 'package:traveler_app/features/profile/model/profile_model.dart';
@@ -27,6 +28,20 @@ class ProfileService extends GetxService {
     });
     if (response.statusCode == 200) {
       return ProfileModel.fromJson(json.decode(response.body));
+    }
+    return null;
+  }
+
+  /// Uploads avatar; returns the new avatar URL on success.
+  Future<String?> uploadAvatar(File file) async {
+    final response = await apiClient.uploadFile(
+      '${AppConstants.profileUrl}/avatar',
+      file,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final body = json.decode(response.body);
+      final data = body['data'] ?? body;
+      if (data is Map) return data['avatar_url']?.toString();
     }
     return null;
   }

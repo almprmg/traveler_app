@@ -5,6 +5,7 @@ import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/home/model/home_model.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class HomeHotelsSection extends StatelessWidget {
   final List<Hotel> hotels;
@@ -33,7 +34,6 @@ class HomeHotelsSection extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppTheme.white,
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: AppTheme.lightShadow,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,8 +66,7 @@ class HomeHotelsSection extends StatelessWidget {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.location_on_outlined,
-                                size: 12, color: AppTheme.textTertiary),
+                            const HugeIcon(icon: HugeIcons.strokeRoundedLocation01, size: 12, color: AppTheme.textTertiary),
                             const SizedBox(width: 2),
                             Expanded(
                               child: Text(
@@ -106,8 +105,7 @@ class HomeHotelsSection extends StatelessWidget {
                             ),
                             Row(
                               children: [
-                                const Icon(Icons.star_rounded,
-                                    size: 12, color: AppTheme.gold),
+                                const HugeIcon(icon: HugeIcons.strokeRoundedStar, size: 12, color: AppTheme.gold),
                                 const SizedBox(width: 2),
                                 Text(
                                   h.rating.toStringAsFixed(1),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/util/app_theme.dart';
 
 class NavItem extends StatelessWidget {
-  final IconData icon;
-  final IconData activeIcon;
+  final List<List<dynamic>> icon;
+  final List<List<dynamic>> activeIcon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
@@ -35,8 +36,8 @@ class NavItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                isSelected ? activeIcon : icon,
+              HugeIcon(
+                icon: isSelected ? activeIcon : icon,
                 color: isSelected ? AppTheme.primary : Colors.grey,
                 size: 22,
               ),

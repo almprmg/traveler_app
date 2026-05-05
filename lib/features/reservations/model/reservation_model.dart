@@ -43,6 +43,7 @@ class ReservationDetail {
   final String id;
   final String bookingNumber;
   final String productType;
+  final String productId;
   final String productName;
   final String? productImage;
   final String status;
@@ -63,6 +64,7 @@ class ReservationDetail {
     required this.id,
     required this.bookingNumber,
     required this.productType,
+    required this.productId,
     required this.productName,
     this.productImage,
     required this.status,
@@ -86,7 +88,9 @@ class ReservationDetail {
       id: data['id']?.toString() ?? '',
       bookingNumber: data['booking_number'] ?? '',
       productType: data['product_type'] ?? '',
+      productId: data['product_id']?.toString() ?? '',
       productName: data['product_name'] ??
+          data['product_title'] ??
           data['product']?['title'] ??
           data['product']?['name'] ??
           '',

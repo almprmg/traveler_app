@@ -85,4 +85,12 @@ class AuthService extends GetxService {
         await apiClient.postData(AppConstants.logoutUrl, null);
     return response.statusCode == 200;
   }
+
+  Future<bool> deleteAccount() async {
+    final response = await apiClient.deleteData(
+      '${AppConstants.apiUrl}auth/account',
+      null,
+    );
+    return response.statusCode == 200;
+  }
 }
