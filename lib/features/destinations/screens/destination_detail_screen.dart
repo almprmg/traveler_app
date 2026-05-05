@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/base/money_icon.dart';
@@ -35,9 +36,9 @@ class DestinationDetailScreen extends StatelessWidget {
                     Text(d.name, style: AppTypography.h2),
                     const SizedBox(height: 8),
                     if (d.description.isNotEmpty)
-                      Text(
+                      HtmlWidget(
                         d.description,
-                        style: AppTypography.bodyMedium,
+                        textStyle: AppTypography.bodyMedium,
                       ),
                   ],
                 ),

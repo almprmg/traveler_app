@@ -57,9 +57,9 @@ class ActivityFaq {
   ActivityFaq({required this.title, required this.content});
 
   factory ActivityFaq.fromJson(Map<String, dynamic> json) => ActivityFaq(
-        title: json['title']?.toString() ?? '',
-        content: json['content']?.toString() ?? '',
-      );
+    title: json['title']?.toString() ?? '',
+    content: json['content']?.toString() ?? '',
+  );
 }
 
 class ActivityReview {
@@ -82,7 +82,8 @@ class ActivityReview {
   factory ActivityReview.fromJson(Map<String, dynamic> json) {
     return ActivityReview(
       id: json['id']?.toString() ?? '',
-      userName: json['reviewer']?['name'] ??
+      userName:
+          json['reviewer']?['name'] ??
           json['user']?['name'] ??
           json['user_name'] ??
           '',
@@ -142,8 +143,9 @@ class ActivityDetail {
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       imageUrl: json['image_url'] ?? '',
-      gallery:
-          (json['gallery'] as List? ?? []).map((e) => e.toString()).toList(),
+      gallery: (json['gallery'] as List? ?? [])
+          .map((e) => e.toString())
+          .toList(),
       price: (json['price'] as num?)?.toDouble() ?? 0,
       duration: json['duration']?.toString(),
       location: json['location']?.toString(),
@@ -155,10 +157,7 @@ class ActivityDetail {
           .whereType<Map<String, dynamic>>()
           .map(ActivityPlanItem.fromJson)
           .toList(),
-      faqs: (json['faqs'] as List? ?? [])
-          .whereType<Map<String, dynamic>>()
-          .map(ActivityFaq.fromJson)
-          .toList(),
+      faqs: _parseFaqs(json['faqs']),
       rating: (json['average_rating'] as num?)?.toDouble() ?? 0,
       reviewsCount: (json['total_reviews'] as num?)?.toInt() ?? 0,
       reviews: (json['reviews'] as List? ?? [])
@@ -169,9 +168,25 @@ class ActivityDetail {
   }
 
   static List<String> _parseStringList(dynamic raw) {
-    if (raw is List) return raw.map((e) => e.toString()).toList();
+    String extract(dynamic e) =>
+        e is Map ? (e['title']?.toString() ?? '') : e.toString();
+    if (raw is List) return raw.map(extract).toList();
+    if (raw is Map) return raw.values.map(extract).toList();
+    return [];
+  }
+
+  static List<ActivityFaq> _parseFaqs(dynamic raw) {
+    if (raw is List) {
+      return raw
+          .whereType<Map<String, dynamic>>()
+          .map(ActivityFaq.fromJson)
+          .toList();
+    }
     if (raw is Map) {
-      return raw.values.map((e) => e.toString()).toList();
+      return raw.values
+          .whereType<Map<String, dynamic>>()
+          .map(ActivityFaq.fromJson)
+          .toList();
     }
     return [];
   }

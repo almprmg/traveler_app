@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/product_detail_widgets.dart';
@@ -35,8 +36,7 @@ class ActivityDetailScreen extends StatelessWidget {
                       spacing: 8,
                       runSpacing: 6,
                       children: [
-                        if (a.duration != null)
-                          DetailBadge(text: a.duration!),
+                        if (a.duration != null) DetailBadge(text: a.duration!),
                         if (a.location != null)
                           DetailBadge(
                             text: a.location!,
@@ -77,7 +77,10 @@ class ActivityDetailScreen extends StatelessWidget {
               SliverToBoxAdapter(
                 child: DetailSection(
                   title: 'description'.tr,
-                  child: Text(a.description, style: AppTypography.bodyMedium),
+                  child: HtmlWidget(
+                    a.description,
+                    textStyle: AppTypography.bodyMedium,
+                  ),
                 ),
               ),
             if (a.highlights.isNotEmpty)
