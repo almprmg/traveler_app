@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "346378259556",
+    "firebase_url": "https://mogrym-c5981.firebaseio.com",
+    "project_id": "mogrym-c5981",
+    "storage_bucket": "mogrym-c5981.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346378259556:android:7d9a6d7e19114436be2371",
+        "android_client_info": {
+          "package_name": "com.anameaflam.mogm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcB1XyoGkBgW84QK2H4izlPiyxRHaMTAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346378259556:android:7eb0d169c4afba91be2371",
+        "android_client_info": {
+          "package_name": "com.anameaflam.mogn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcB1XyoGkBgW84QK2H4izlPiyxRHaMTAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346378259556:android:9d18559724711939be2371",
+        "android_client_info": {
+          "package_name": "com.example.traveler_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcB1XyoGkBgW84QK2H4izlPiyxRHaMTAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346378259556:android:ec040cffb04c26e2be2371",
+        "android_client_info": {
+          "package_name": "com.school.mogrym"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcB1XyoGkBgW84QK2H4izlPiyxRHaMTAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346378259556-onp9rqncns986jbb9e83deteuh9b2gvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
