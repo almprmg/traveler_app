@@ -79,13 +79,23 @@ class _NavScreenState extends State<NavScreen> {
         }
       },
       child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          onPageChanged: _nav.onPageSwiped,
-          children: _pages,
+        extendBody: true,
+        body: Stack(
+          children: [
+            PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: _nav.onPageSwiped,
+              children: _pages,
+            ),
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: BottomNavBar(),
+            ),
+          ],
         ),
-        bottomNavigationBar: const BottomNavBar(),
       ),
     );
   }

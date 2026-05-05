@@ -378,7 +378,13 @@ class _TourFormState extends State<_TourForm> {
   DateTime? _month;
   String? _duration;
 
-  static const _tourTypes = ['Adventure', 'Cultural', 'Family', 'Honeymoon', 'Group'];
+  static const _tourTypes = [
+    'Adventure',
+    'Cultural',
+    'Family',
+    'Honeymoon',
+    'Group',
+  ];
   static const _durations = ['1-3 days', '4-7 days', '8-14 days', '15+ days'];
 
   @override
@@ -456,13 +462,16 @@ class _TourFormState extends State<_TourForm> {
         const SizedBox(height: 14),
         _SearchActionButton(
           onPressed: () {
-            Get.toNamed(toursRoute, arguments: {
-              'destination_id': _destination?.id,
-              'destination_name': _destination?.name,
-              'tour_type': _tourType,
-              'month': _month?.toIso8601String(),
-              'duration': _duration,
-            });
+            Get.toNamed(
+              toursRoute,
+              arguments: {
+                'destination_id': _destination?.id,
+                'destination_name': _destination?.name,
+                'tour_type': _tourType,
+                'month': _month?.toIso8601String(),
+                'duration': _duration,
+              },
+            );
           },
         ),
       ],
@@ -521,7 +530,8 @@ class _HotelFormState extends State<_HotelForm> {
             final now = DateTime.now();
             final v = await showDateRangePicker(
               context: context,
-              initialDateRange: _range ??
+              initialDateRange:
+                  _range ??
                   DateTimeRange(
                     start: now,
                     end: now.add(const Duration(days: 3)),
@@ -556,14 +566,17 @@ class _HotelFormState extends State<_HotelForm> {
         const SizedBox(height: 14),
         _SearchActionButton(
           onPressed: () {
-            Get.toNamed(hotelsRoute, arguments: {
-              'destination_id': _destination?.id,
-              'destination_name': _destination?.name,
-              'check_in': _range?.start.toIso8601String(),
-              'check_out': _range?.end.toIso8601String(),
-              'room_type': _roomType,
-              'guests': _guests,
-            });
+            Get.toNamed(
+              hotelsRoute,
+              arguments: {
+                'destination_id': _destination?.id,
+                'destination_name': _destination?.name,
+                'check_in': _range?.start.toIso8601String(),
+                'check_out': _range?.end.toIso8601String(),
+                'room_type': _roomType,
+                'guests': _guests,
+              },
+            );
           },
         ),
       ],
@@ -715,12 +728,15 @@ class _ActivitiesFormState extends State<_ActivitiesForm> {
         const SizedBox(height: 14),
         _SearchActionButton(
           onPressed: () {
-            Get.toNamed(activitiesRoute, arguments: {
-              'destination_id': _location?.id,
-              'destination_name': _location?.name,
-              'date': _day?.toIso8601String(),
-              'travelers': _travelers,
-            });
+            Get.toNamed(
+              activitiesRoute,
+              arguments: {
+                'destination_id': _location?.id,
+                'destination_name': _location?.name,
+                'date': _day?.toIso8601String(),
+                'travelers': _travelers,
+              },
+            );
           },
         ),
       ],
@@ -810,11 +826,14 @@ class _VisaFormState extends State<_VisaForm> {
         const SizedBox(height: 14),
         _SearchActionButton(
           onPressed: () {
-            Get.toNamed(visasRoute, arguments: {
-              'country': _country,
-              'visa_type': _visaType,
-              'visa_mode': _visaMode,
-            });
+            Get.toNamed(
+              visasRoute,
+              arguments: {
+                'country': _country,
+                'visa_type': _visaType,
+                'visa_mode': _visaMode,
+              },
+            );
           },
         ),
       ],
@@ -896,12 +915,15 @@ class _TransportFormState extends State<_TransportForm> {
         const SizedBox(height: 14),
         _SearchActionButton(
           onPressed: () {
-            Get.toNamed(transportsRoute, arguments: {
-              'destination_id': _from?.id,
-              'destination_name': _from?.name,
-              'transport_type': _type,
-              'date': _date?.toIso8601String(),
-            });
+            Get.toNamed(
+              transportsRoute,
+              arguments: {
+                'destination_id': _from?.id,
+                'destination_name': _from?.name,
+                'transport_type': _type,
+                'date': _date?.toIso8601String(),
+              },
+            );
           },
         ),
       ],

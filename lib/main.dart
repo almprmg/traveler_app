@@ -50,7 +50,9 @@ class MyApp extends StatelessWidget {
               child: MediaQuery(
                 data: MediaQuery.of(context).copyWith(
                   textScaler: TextScaler.linear(
-                    MediaQuery.of(context).textScaler.scale(1.0).clamp(1.0, 1.2),
+                    MediaQuery.of(
+                      context,
+                    ).textScaler.scale(1.0).clamp(1.0, 1.2),
                   ),
                 ),
                 child: OfflineBanner(child: child!),

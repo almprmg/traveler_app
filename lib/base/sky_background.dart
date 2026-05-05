@@ -22,7 +22,7 @@ class SkyBackground extends StatelessWidget {
     this.child,
     this.coverFull = false,
     this.topFraction = 0.35,
-    this.opacity = 0.55,
+    this.opacity = 0.22,
     this.clouds = false,
   });
 
