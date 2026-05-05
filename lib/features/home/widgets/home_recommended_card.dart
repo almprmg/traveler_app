@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/features/home/model/home_model.dart';
 import 'package:traveler_app/features/home/widgets/home_arrow_circle.dart';
+import 'package:traveler_app/features/home/widgets/home_image_scrim.dart';
 import 'package:traveler_app/features/home/widgets/home_travelled_badge.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
@@ -17,7 +18,6 @@ class HomeRecommendedCard extends StatelessWidget {
 
   static const double _width = 220;
   static const double _height = 268;
-  static const double _imageHeight = 130;
 
   @override
   Widget build(BuildContext context) {
@@ -25,61 +25,45 @@ class HomeRecommendedCard extends StatelessWidget {
     final travelled = 5000 + Random(seed).nextInt(5001);
 
     return GestureDetector(
-      onTap: () =>
-          Get.toNamed(tourDetailRoute, arguments: {'slug': tour.slug}),
+      onTap: () => Get.toNamed(tourDetailRoute, arguments: {'slug': tour.slug}),
       child: Container(
         width: _width,
         height: _height,
         decoration: BoxDecoration(
           color: AppTheme.white,
           borderRadius: BorderRadius.circular(AppTheme.radius20),
-          border: Border.all(color: AppTheme.cardBorder, width: 1),
+          border: Border.all(color: AppTheme.cardBorder, width: 0.75),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _CardHero(imageUrl: tour.imageUrl, height: _imageHeight),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(AppTheme.spacing12),
-                child: _CardBody(
-                  title: tour.title,
-                  location: tour.title,
-                  travelledCount: travelled,
-                  seed: seed,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppTheme.radius20 - 1),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              AppCachedImage(imageUrl: tour.imageUrl, fit: BoxFit.cover),
+              const HomeImageScrim(),
+              const Positioned(
+                top: AppTheme.spacing8,
+                right: AppTheme.spacing8,
+                child: _FavoriteButton(),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(AppTheme.spacing12),
+                  child: _CardBody(
+                    title: tour.title,
+                    location: tour.title,
+                    travelledCount: travelled,
+                    seed: seed,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    );
-  }
-}
-
-class _CardHero extends StatelessWidget {
-  final String imageUrl;
-  final double height;
-
-  const _CardHero({required this.imageUrl, required this.height});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AppCachedImage(
-          imageUrl: imageUrl,
-          height: height,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
-        const Positioned(
-          top: AppTheme.spacing8,
-          right: AppTheme.spacing8,
-          child: _FavoriteButton(),
-        ),
-      ],
     );
   }
 }
@@ -121,6 +105,7 @@ class _CardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -135,7 +120,7 @@ class _CardBody extends StatelessWidget {
         ),
         const SizedBox(height: AppTheme.spacing4),
         _LocationRow(location: location),
-        const Spacer(),
+        const SizedBox(height: AppTheme.spacing8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
