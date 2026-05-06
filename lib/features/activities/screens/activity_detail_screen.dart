@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/product_detail_widgets.dart';
+import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/activities/controller/activities_controller.dart';
+import 'package:traveler_app/features/activities/model/activity_model.dart';
 import 'package:traveler_app/routes.dart';
+import 'package:traveler_app/util/app_constants.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_detail_layout.dart';
 
 class ActivityDetailScreen extends StatelessWidget {
   const ActivityDetailScreen({super.key});
@@ -14,154 +16,145 @@ class ActivityDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.find<ActivityDetailController>();
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: Obx(() {
-        if (c.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final a = c.activity.value;
-        if (a == null) return DetailErrorView(onRetry: c.fetch);
+    return Obx(() {
+      if (c.isLoading.value) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      }
+      final a = c.activity.value;
+      if (a == null) {
+        return Scaffold(body: ProductDetailErrorState(onRetry: c.fetch));
+      }
+      return ProductDetailLayout(
+        imageUrl: a.imageUrl,
+        shareTitle: a.title,
+        shareUrl: '${AppConstants.baseUrl}/activities/${a.slug}',
+        bottomBar: ProductDetailBookingBar(
+          priceLabel: 'price_per_person'.tr,
+          price: a.price,
+          buttonLabel: 'book_now'.tr,
+          onPressed: () => Get.toNamed(
+            bookingCreateRoute,
+            arguments: {
+              'product_type': 'activities',
+              'product_id': a.id,
+              'product_title': a.title,
+              'unit_price': a.price,
+            },
+          ),
+        ),
+        child: _ActivityContent(activity: a),
+      );
+    });
+  }
+}
 
-        return Stack(
-          children: [
-            SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 90),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProductHero(imageUrl: a.imageUrl),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 6,
-                          children: [
-                            if (a.duration != null)
-                              DetailBadge(text: a.duration!),
-                            if (a.location != null)
-                              DetailBadge(
-                                text: a.location!,
-                                color: AppTheme.success,
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Text(a.title, style: AppTypography.h2),
-                        const SizedBox(height: 6),
-                        if (a.country != null)
-                          Row(
-                            children: [
-                              const HugeIcon(
-                                icon: HugeIcons.strokeRoundedLocation01,
-                                color: AppTheme.textTertiary,
-                                size: 16,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                a.country!,
-                                style: AppTypography.bodyMedium.copyWith(
-                                  color: AppTheme.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        const SizedBox(height: 10),
-                        DetailRatingPill(
-                          rating: a.rating,
-                          reviewsCount: a.reviewsCount,
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (a.description.isNotEmpty)
-                    DetailSection(
-                      title: 'description'.tr,
-                      child: HtmlWidget(
-                        a.description,
-                        textStyle: AppTypography.bodyMedium,
-                      ),
-                    ),
-                  if (a.highlights.isNotEmpty)
-                    DetailSection(
-                      title: 'highlights'.tr,
-                      child: BulletList(
-                        items: a.highlights,
-                        hugeIcon: HugeIcons.strokeRoundedStar,
-                        iconColor: AppTheme.gold,
-                      ),
-                    ),
-                  if (a.includes.isNotEmpty)
-                    DetailSection(
-                      title: 'includes'.tr,
-                      child: BulletList(
-                        items: a.includes,
-                        hugeIcon: HugeIcons.strokeRoundedCheckmarkCircle02,
-                        iconColor: AppTheme.success,
-                      ),
-                    ),
-                  if (a.excludes.isNotEmpty)
-                    DetailSection(
-                      title: 'excludes'.tr,
-                      child: BulletList(
-                        items: a.excludes,
-                        hugeIcon: HugeIcons.strokeRoundedCancel01,
-                        iconColor: AppTheme.error,
-                      ),
-                    ),
-                  if (a.plan.isNotEmpty)
-                    DetailSection(
-                      title: 'plan'.tr,
-                      child: DetailFaqList(
-                        items: a.plan
-                            .map((p) => (title: p.title, content: p.content))
-                            .toList(),
-                      ),
-                    ),
-                  if (a.faqs.isNotEmpty)
-                    DetailSection(
-                      title: 'faqs'.tr,
-                      child: DetailFaqList(
-                        items: a.faqs
-                            .map((f) => (title: f.title, content: f.content))
-                            .toList(),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: AppTheme.white,
-                  border: Border(
-                    top: BorderSide(color: AppTheme.border, width: 0.5),
-                  ),
-                ),
-                child: BookNowBar(
-                  price: a.price,
-                  priceLabel: 'price_per_person'.tr,
-                  onPressed: () => Get.toNamed(
-                    bookingCreateRoute,
-                    arguments: {
-                      'product_type': 'activities',
-                      'product_id': a.id,
-                      'product_title': a.title,
-                      'unit_price': a.price,
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      }),
+class _ActivityContent extends StatelessWidget {
+  final ActivityDetail activity;
+  const _ActivityContent({required this.activity});
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = [activity.location, activity.country]
+        .where((s) => s != null && s.isNotEmpty)
+        .join(', ');
+    final chips = <String>[
+      if (activity.duration != null) activity.duration!,
+      if (activity.country != null) activity.country!,
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ProductDetailTitleRow(
+          title: activity.title,
+          trailing: MoneyWithIcon(
+            money: activity.price,
+            precision: 0,
+            textSize: 18,
+            color: AppTheme.textPrimary,
+            fontWeight: AppTypography.extraBold,
+          ),
+        ),
+        const SizedBox(height: AppTheme.spacing4),
+        ProductDetailSubtitle(subtitle),
+        if (activity.gallery.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailGallery(images: activity.gallery),
+        ],
+        if (chips.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('property_details'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailChips(labels: chips),
+        ],
+        if (activity.description.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailExpandableDescription(html: activity.description),
+        ],
+        if (activity.highlights.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('highlights'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailBulletList(
+            items: activity.highlights,
+            icon: HugeIcons.strokeRoundedStar,
+            iconColor: AppTheme.gold,
+          ),
+        ],
+        if (activity.includes.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailSectionHeader('includes'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailBulletList(
+            items: activity.includes,
+            icon: HugeIcons.strokeRoundedCheckmarkCircle02,
+            iconColor: AppTheme.success,
+          ),
+        ],
+        if (activity.excludes.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailSectionHeader('excludes'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailBulletList(
+            items: activity.excludes,
+            icon: HugeIcons.strokeRoundedCancel01,
+            iconColor: AppTheme.error,
+          ),
+        ],
+        if (activity.plan.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('plan'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ...activity.plan.map((p) => ProductDetailFaqItem(
+                title: p.title,
+                content: p.content,
+              )),
+        ],
+        if (activity.faqs.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailSectionHeader('faqs'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ...activity.faqs.map((f) => ProductDetailFaqItem(
+                title: f.title,
+                content: f.content,
+              )),
+        ],
+        const SizedBox(height: AppTheme.spacing24),
+        ProductDetailSectionHeader('rating_and_reviews'.tr),
+        const SizedBox(height: AppTheme.spacing8),
+        ProductDetailRatingSummary(
+          rating: activity.rating,
+          reviewsCount: activity.reviewsCount,
+        ),
+        if (activity.reviews.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ...activity.reviews.take(3).map((r) => ProductDetailReviewCard(
+                userName: r.userName,
+                rating: r.rating,
+                comment: r.comment,
+              )),
+        ],
+      ],
     );
   }
 }
