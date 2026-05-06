@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:traveler_app/base/app_header.dart';
+import 'package:traveler_app/base/circle_icon_button.dart';
 import 'package:traveler_app/base/empty_state.dart';
 import 'package:traveler_app/features/visas/controller/visas_controller.dart';
 import 'package:traveler_app/features/visas/widgets/visa_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/app_search_field.dart';
+import 'package:traveler_app/widgets/filter_bottom_sheet.dart';
 import 'package:traveler_app/widgets/search_forms.dart';
 
 class VisasScreen extends StatefulWidget {
@@ -25,36 +29,41 @@ class _VisasScreenState extends State<VisasScreen> {
     _c.fetch();
   }
 
+  void _openFilter() {
+    showFilterBottomSheet(
+      context,
+      form: VisaSearchForm(
+        onSearch: (_) {
+          Navigator.of(context).pop();
+          _c.fetch();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(title: Text('tab_visa'.tr)),
+      appBar: AppHeader(
+        title: 'tab_visa'.tr,
+        actions: [
+          CircleIconButton(
+            icon: HugeIcons.strokeRoundedFilterHorizontal,
+            onTap: _openFilter,
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          VisaSearchForm(
-            onSearch: (_) {
-              FocusScope.of(context).unfocus();
-              _c.fetch();
-            },
-          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-            child: TextField(
-              onChanged: _c.search,
-              decoration: InputDecoration(
-                hintText: 'search_hint'.tr,
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: HugeIcon(
-                    icon: HugeIcons.strokeRoundedSearch01,
-                    color: AppTheme.textTertiary,
-                    size: 20,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              ),
+            padding: const EdgeInsets.fromLTRB(
+              AppTheme.spacing16,
+              AppTheme.spacing12,
+              AppTheme.spacing16,
+              AppTheme.spacing8,
             ),
+            child: AppSearchField(onChanged: _c.search),
           ),
           Expanded(
             child: Obx(() {
@@ -68,9 +77,12 @@ class _VisasScreenState extends State<VisasScreen> {
                 onRefresh: _c.fetch,
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
+                    horizontal: AppTheme.spacing16,
+                    vertical: AppTheme.spacing8,
+                  ),
                   itemCount: _c.visas.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  separatorBuilder: (_, _) =>
+                      const SizedBox(height: AppTheme.spacing12),
                   itemBuilder: (_, i) => VisaCard(
                     visa: _c.visas[i],
                     onTap: () => Get.toNamed(

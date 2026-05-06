@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:traveler_app/base/app_cash_image.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/tours/model/tour_model.dart';
 import 'package:traveler_app/util/app_theme.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_details_button.dart';
+import 'package:traveler_app/widgets/product_image_hero.dart';
 
 class TourCard extends StatelessWidget {
   final TourListItem tour;
@@ -18,104 +21,148 @@ class TourCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radius16),
+          borderRadius: BorderRadius.circular(AppTheme.radius20),
+          border: Border.all(color: AppTheme.cardBorder, width: 0.75),
         ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(AppTheme.radius16),
-              ),
-              child: AppCachedImage(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppTheme.radius20 - 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ProductImageHero(
                 imageUrl: tour.imageUrl,
-                width: 110,
-                height: 110,
-                fit: BoxFit.cover,
+                height: 170,
+                fadeHeight: 55,
+                topEndOverlay: tour.categoryName != null
+                    ? ProductBadgePill(label: tour.categoryName!)
+                    : null,
+                bottomEndOverlay: _GhostRatingPill(rating: tour.rating),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (tour.categoryName != null) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryWithOpacity,
-                          borderRadius:
-                              BorderRadius.circular(AppTheme.radius4),
-                        ),
-                        child: Text(
-                          tour.categoryName!,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                    ],
-                    Text(
-                      tour.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    if (tour.location != null)
-                      Row(
-                        children: [
-                          const HugeIcon(icon: HugeIcons.strokeRoundedLocation01, size: 13, color: AppTheme.textTertiary),
-                          const SizedBox(width: 2),
-                          Expanded(
-                            child: Text(
-                              tour.location!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppTheme.textTertiary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const HugeIcon(icon: HugeIcons.strokeRoundedStar, size: 14, color: AppTheme.gold),
-                        const SizedBox(width: 2),
-                        Text(
-                          tour.rating.toStringAsFixed(1),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.textPrimary,
-                          ),
-                        ),
-                        const Spacer(),
-                        MoneyWithIcon(
-                          money: tour.price,
-                          precision: 0,
-                          textSize: 14,
-                          color: AppTheme.primary,
-                        ),
-                      ],
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppTheme.spacing12,
+                  0,
+                  AppTheme.spacing12,
+                  AppTheme.spacing12,
                 ),
+                child: _Body(tour: tour),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final TourListItem tour;
+  const _Body({required this.tour});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          tour.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppTheme.textPrimary,
+            fontWeight: AppTypography.extraBold,
+            height: 1.25,
+          ),
+        ),
+        if (tour.location != null) ...[
+          const SizedBox(height: AppTheme.spacing2),
+          _LocationRow(location: tour.location!),
+        ],
+        const SizedBox(height: AppTheme.spacing8),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: MoneyWithIcon(
+                money: tour.price,
+                precision: 0,
+                textSize: 15,
+                color: AppTheme.textPrimary,
+                fontWeight: AppTypography.extraBold,
               ),
             ),
+            const SizedBox(width: AppTheme.spacing8),
+            const ProductDetailsButton(),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _LocationRow extends StatelessWidget {
+  final String location;
+  const _LocationRow({required this.location});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const HugeIcon(
+          icon: HugeIcons.strokeRoundedLocation01,
+          color: AppTheme.textTertiary,
+          size: 12,
+        ),
+        const SizedBox(width: AppTheme.spacing4),
+        Expanded(
+          child: Text(
+            location,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.labelSmall.copyWith(
+              color: AppTheme.textTertiary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GhostRatingPill extends StatelessWidget {
+  final double rating;
+  const _GhostRatingPill({required this.rating});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppTheme.spacing8,
+        vertical: AppTheme.spacing4,
+      ),
+      decoration: BoxDecoration(
+        color: AppTheme.textPrimary.withValues(alpha: 0.42),
+        borderRadius: BorderRadius.circular(AppTheme.radiusPill),
+        border: Border.all(
+          color: AppTheme.white.withValues(alpha: 0.4),
+          width: 0.75,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset("assets/svg/star_icon.svg", width: 14, height: 14),
+          const SizedBox(width: AppTheme.spacing2),
+          Text(
+            rating.toStringAsFixed(1),
+            style: AppTypography.labelSmall.copyWith(
+              color: AppTheme.white,
+              fontWeight: AppTypography.extraBold,
+            ),
+          ),
+        ],
       ),
     );
   }

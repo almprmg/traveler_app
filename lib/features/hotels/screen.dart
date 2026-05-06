@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:traveler_app/base/app_header.dart';
+import 'package:traveler_app/base/circle_icon_button.dart';
 import 'package:traveler_app/base/empty_state.dart';
 import 'package:traveler_app/features/home/controller/home_controller.dart';
 import 'package:traveler_app/features/hotels/controller/hotels_controller.dart';
 import 'package:traveler_app/features/hotels/widgets/hotel_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/app_search_field.dart';
+import 'package:traveler_app/widgets/filter_bottom_sheet.dart';
 import 'package:traveler_app/widgets/search_forms.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 class HotelsScreen extends StatefulWidget {
   const HotelsScreen({super.key});
@@ -23,43 +27,46 @@ class _HotelsScreenState extends State<HotelsScreen> {
   void initState() {
     super.initState();
     _c = Get.find<HotelsController>();
-    // Always fetch fresh when this screen is opened as a route
     _c.fetch();
+  }
+
+  void _openFilter() {
+    showFilterBottomSheet(
+      context,
+      form: HotelSearchForm(
+        destinations:
+            Get.find<HomeController>().homeData.value?.destinations ?? [],
+        onSearch: (_) {
+          Navigator.of(context).pop();
+          _c.fetch();
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        title: Text('hotels'.tr),
+      appBar: AppHeader(
+        title: 'hotels'.tr,
         actions: [
-          IconButton(
-            icon: const HugeIcon(icon: HugeIcons.strokeRoundedFilterHorizontal),
-            onPressed: () => _showFilters(context),
+          CircleIconButton(
+            icon: HugeIcons.strokeRoundedFilterHorizontal,
+            onTap: _openFilter,
           ),
         ],
       ),
       body: Column(
         children: [
-          HotelSearchForm(
-            destinations:
-                Get.find<HomeController>().homeData.value?.destinations ?? [],
-            onSearch: (_) {
-              FocusScope.of(context).unfocus();
-              _c.fetch();
-            },
-          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-            child: TextField(
-              onChanged: _c.search,
-              decoration: InputDecoration(
-                hintText: 'search_hint'.tr,
-                prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedSearch01),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              ),
+            padding: const EdgeInsets.fromLTRB(
+              AppTheme.spacing16,
+              AppTheme.spacing12,
+              AppTheme.spacing16,
+              AppTheme.spacing8,
             ),
+            child: AppSearchField(onChanged: _c.search),
           ),
           Expanded(
             child: Obx(() {
@@ -72,10 +79,13 @@ class _HotelsScreenState extends State<HotelsScreen> {
               return RefreshIndicator(
                 onRefresh: _c.fetch,
                 child: ListView.separated(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacing16,
+                    vertical: AppTheme.spacing8,
+                  ),
                   itemCount: _c.hotels.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  separatorBuilder: (_, _) =>
+                      const SizedBox(height: AppTheme.spacing12),
                   itemBuilder: (_, i) => HotelCard(
                     hotel: _c.hotels[i],
                     onTap: () => Get.toNamed(
@@ -88,67 +98,6 @@ class _HotelsScreenState extends State<HotelsScreen> {
             }),
           ),
         ],
-      ),
-    );
-  }
-
-  void _showFilters(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text('filters'.tr,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 16),
-            Text('sort_by'.tr,
-                style: const TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: [
-                _filterChip('price_asc'.tr, 'price_asc'),
-                _filterChip('price_desc'.tr, 'price_desc'),
-                _filterChip('rating'.tr, 'rating'),
-              ],
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Get.back();
-                _c.fetch();
-              },
-              child: Text('apply'.tr),
-            ),
-            const SizedBox(height: 8),
-            TextButton(
-              onPressed: () {
-                _c.clearFilters();
-                Get.back();
-              },
-              child: Text('clear_filters'.tr),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _filterChip(String label, String value) {
-    return Obx(
-      () => FilterChip(
-        label: Text(label),
-        selected: _c.selectedSort.value == value,
-        onSelected: (_) => _c.selectedSort.value = value,
-        selectedColor: AppTheme.primaryWithOpacity,
-        checkmarkColor: AppTheme.primary,
       ),
     );
   }

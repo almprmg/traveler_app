@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/transports/model/transport_model.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_details_button.dart';
+import 'package:traveler_app/widgets/product_image_hero.dart';
 
 class TransportCard extends StatelessWidget {
   final TransportListItem transport;
@@ -22,92 +24,107 @@ class TransportCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radius16),
+          borderRadius: BorderRadius.circular(AppTheme.radius20),
+          border: Border.all(color: AppTheme.cardBorder, width: 0.75),
         ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(AppTheme.radius16),
-              ),
-              child: AppCachedImage(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppTheme.radius20 - 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ProductImageHero(
                 imageUrl: transport.imageUrl,
-                width: 110,
-                height: 110,
-                fit: BoxFit.cover,
+                topEndOverlay: ProductRatingPill(rating: transport.rating),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      transport.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    if (transport.location != null)
-                      Row(
-                        children: [
-                          const HugeIcon(
-                            icon: HugeIcons.strokeRoundedLocation01,
-                            size: 13,
-                            color: AppTheme.textTertiary,
-                          ),
-                          const SizedBox(width: 2),
-                          Expanded(
-                            child: Text(
-                              transport.location!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppTheme.textTertiary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        const HugeIcon(
-                          icon: HugeIcons.strokeRoundedStar,
-                          size: 14,
-                          color: AppTheme.gold,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          transport.rating.toStringAsFixed(1),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const Spacer(),
-                        MoneyWithIcon(
-                          money: transport.carPrice,
-                          precision: 0,
-                          textSize: 14,
-                          color: AppTheme.primary,
-                        ),
-                      ],
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppTheme.spacing16,
+                  0,
+                  AppTheme.spacing16,
+                  AppTheme.spacing16,
                 ),
+                child: _Body(transport: transport),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final TransportListItem transport;
+  const _Body({required this.transport});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          transport.title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: AppTypography.bodyLarge.copyWith(
+            color: AppTheme.textPrimary,
+            fontWeight: AppTypography.extraBold,
+            height: 1.3,
+          ),
+        ),
+        if (transport.location != null) ...[
+          const SizedBox(height: AppTheme.spacing4),
+          _LocationRow(location: transport.location!),
+        ],
+        const SizedBox(height: AppTheme.spacing12),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: MoneyWithIcon(
+                money: transport.carPrice,
+                precision: 0,
+                textSize: 16,
+                color: AppTheme.textPrimary,
+                fontWeight: AppTypography.extraBold,
+              ),
+            ),
+            const SizedBox(width: AppTheme.spacing8),
+            const ProductDetailsButton(),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _LocationRow extends StatelessWidget {
+  final String location;
+  const _LocationRow({required this.location});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const HugeIcon(
+          icon: HugeIcons.strokeRoundedLocation01,
+          color: AppTheme.textTertiary,
+          size: 12,
+        ),
+        const SizedBox(width: AppTheme.spacing4),
+        Expanded(
+          child: Text(
+            location,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.labelSmall.copyWith(
+              color: AppTheme.textTertiary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

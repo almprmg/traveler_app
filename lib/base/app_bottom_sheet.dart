@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -65,15 +66,16 @@ class AppBottomSheet extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final keyboardHeight = mediaQuery.viewInsets.bottom;
     final keyboardOpen = keyboardHeight > 0;
-    // The modal bottom sheet route already lifts the sheet by
-    // `viewInsets.bottom` when the keyboard opens — adding `keyboardHeight`
-    // as inner padding here on top of that double-counts and leaves a big
-    // empty strip between the sheet and the keyboard. So when the
-    // keyboard is up we drop the bottom padding entirely; otherwise we
-    // keep room for the home-indicator + a small breath.
     final bottomPadding = keyboardOpen ? 0.0 : mediaQuery.padding.bottom + 12;
+    // Cap by the visible area when the keyboard is open so the sheet
+    // never tries to occupy space behind the keyboard. (The modal route's
+    // own viewInsets padding lifts the sheet — we just need to make sure
+    // our cap doesn't exceed what's actually visible.)
     final screenHeight = mediaQuery.size.height;
-    final maxHeight = height ?? (screenHeight - keyboardHeight) * 0.85;
+    final visible = screenHeight - keyboardHeight;
+    final maxHeight = height != null
+        ? (height! > visible ? visible : height!)
+        : visible * 0.92;
 
     final sheet = Padding(
       padding: EdgeInsets.fromLTRB(
@@ -87,7 +89,7 @@ class AppBottomSheet extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: AssetImage('assets/images/loginbackground.webp'),
+              image: AssetImage('assets/images/sunny_sky.webp'),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(AppTheme.radius24),
@@ -103,93 +105,114 @@ class AppBottomSheet extends StatelessWidget {
                       AppTheme.white.withValues(alpha: _overlayAlpha),
                   borderRadius: BorderRadius.circular(AppTheme.radius24),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                child: Stack(
                   children: [
-                    // Handle
-                    if (showHandle) ...[
-                      const Gap(AppTheme.spacing12),
-                      Container(
-                        width: 40,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: _handleColor,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ],
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Handle
+                        if (showHandle) ...[
+                          const Gap(AppTheme.spacing12),
+                          Container(
+                            width: 40,
+                            height: 4,
+                            decoration: BoxDecoration(
+                              color: _handleColor,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ],
 
-                    // Header
-                    if (title != null) ...[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppTheme.spacing16,
-                          AppTheme.spacing12,
-                          AppTheme.spacing16,
-                          AppTheme.spacing8,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (title!.isNotEmpty)
-                                    Text(
-                                      title!,
-                                      style: AppTypography.h4.copyWith(
-                                        fontWeight: AppTypography.semiBold,
-                                      ),
-                                    ),
-                                  if (subtitle != null) ...[
-                                    if (title!.isNotEmpty)
-                                      const Gap(AppTheme.spacing4),
-                                    Text(
-                                      subtitle!,
-                                      style: AppTypography.bodySmall.copyWith(
-                                        color: AppTheme.textSecondary,
-                                      ),
-                                    ),
-                                  ],
-                                ],
+                        // Header (title / subtitle / action). Close button is
+                        // rendered as a floating overlay below so it does not
+                        // affect content layout.
+                        if (title != null || action != null)
+                          Padding(
+                            // Directional so the reserved space tracks the
+                            // trailing edge in RTL — otherwise the close
+                            // button (which uses PositionedDirectional) ends
+                            // up on the left while the title still has a +40
+                            // gap on the right in Arabic.
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                              AppTheme.spacing16,
+                              AppTheme.spacing12,
+                              showCloseButton
+                                  ? AppTheme.spacing16 + 40
+                                  : AppTheme.spacing16,
+                              AppTheme.spacing8,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: title == null
+                                      ? const SizedBox.shrink()
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            if (title!.isNotEmpty)
+                                              Text(
+                                                title!,
+                                                style: AppTypography.h4
+                                                    .copyWith(
+                                                      fontWeight: AppTypography
+                                                          .semiBold,
+                                                    ),
+                                              ),
+                                            if (subtitle != null) ...[
+                                              if (title!.isNotEmpty)
+                                                const Gap(AppTheme.spacing4),
+                                              Text(
+                                                subtitle!,
+                                                style: AppTypography.bodySmall
+                                                    .copyWith(
+                                                      color: AppTheme
+                                                          .textSecondary,
+                                                    ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                ),
+                                if (action != null) action!,
+                              ],
+                            ),
+                          )
+                        else if (showHandle)
+                          const Gap(AppTheme.spacing4),
+
+                        // Content
+                        shrinkContent ? child : Flexible(child: child),
+
+                        // Footer
+                        if (footer != null) footer!,
+                      ],
+                    ),
+                    if (showCloseButton)
+                      PositionedDirectional(
+                        top: AppTheme.spacing12,
+                        end: AppTheme.spacing12,
+                        child: GestureDetector(
+                          onTap: () => Get.back(),
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: _closeButtonBg,
+                              borderRadius: BorderRadius.circular(
+                                AppTheme.radius8,
                               ),
                             ),
-                            if (action != null) ...[
-                              action!,
-                              const Gap(AppTheme.spacing8),
-                            ],
-                            if (showCloseButton)
-                              GestureDetector(
-                                onTap: () => Get.back(),
-                                child: Container(
-                                  width: 32,
-                                  height: 32,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: _closeButtonBg,
-                                    borderRadius: BorderRadius.circular(
-                                      AppTheme.radius8,
-                                    ),
-                                  ),
-                                  child: HugeIcon(
-                                    icon: HugeIcons.strokeRoundedCancel01,
-                                    size: 17,
-                                    color: _closeButtonIcon,
-                                  ),
-                                ),
-                              ),
-                          ],
+                            child: HugeIcon(
+                              icon: HugeIcons.strokeRoundedCancel01,
+                              size: 17,
+                              color: _closeButtonIcon,
+                            ),
+                          ),
                         ),
                       ),
-                    ] else if (showHandle)
-                      const Gap(AppTheme.spacing4),
-
-                    // Content
-                    shrinkContent ? child : Flexible(child: child),
-
-                    // Footer
-                    if (footer != null) footer!,
                   ],
                 ),
               ),
@@ -213,6 +236,7 @@ class AppBottomSheet extends StatelessWidget {
     double horizontalInset = 10,
     bool showCloseButton = true,
     bool showHandle = true,
+    bool shrinkContent = false,
     Color? backgroundColor,
     String barrierToastMessage = '',
   }) {
@@ -229,7 +253,7 @@ class AppBottomSheet extends StatelessWidget {
         ).animate(CurvedAnimation(parent: a1, curve: Curves.easeOut)),
         child: child,
       ),
-      pageBuilder: (ctx, _, __) => _BarrierConfirmSheet(
+      pageBuilder: (ctx, _, _) => _BarrierConfirmSheet(
         barrierToastMessage: barrierToastMessage,
         sheet: AppBottomSheet(
           title: title,
@@ -241,6 +265,7 @@ class AppBottomSheet extends StatelessWidget {
           horizontalInset: horizontalInset,
           showCloseButton: showCloseButton,
           showHandle: showHandle,
+          shrinkContent: shrinkContent,
           backgroundColor: backgroundColor,
           child: child,
         ),
@@ -261,33 +286,123 @@ class AppBottomSheet extends StatelessWidget {
     bool enableDrag = true,
     bool showCloseButton = true,
     bool showHandle = true,
+    bool shrinkContent = false,
     Color? backgroundColor,
   }) {
-    return showModalBottomSheet<T>(
+    // Uses showGeneralDialog instead of showModalBottomSheet so we control
+    // keyboard handling explicitly via AnimatedPadding. The modal route's
+    // automatic viewInsets lift was unreliable across Flutter versions and
+    // left text inputs hidden behind the keyboard.
+    return showGeneralDialog<T>(
       context: Get.context!,
-      isScrollControlled: true,
-      isDismissible: isDismissible,
-      enableDrag: enableDrag,
-      // Barrier stays fixed — only the sheet slides up
+      barrierDismissible: isDismissible,
+      barrierLabel: 'AppBottomSheet',
       barrierColor: Colors.black54,
-      backgroundColor: Colors.transparent,
-      transitionAnimationController: AnimationController(
-        vsync: Navigator.of(Get.context!),
-        duration: const Duration(milliseconds: 300),
-        reverseDuration: const Duration(milliseconds: 180),
-      ),
-      builder: (_) => AppBottomSheet(
-        title: title,
-        subtitle: subtitle,
-        height: height,
-        action: action,
-        footer: footer,
-        withBackgroundTheme: withBackgroundTheme,
-        horizontalInset: horizontalInset,
-        showCloseButton: showCloseButton,
-        showHandle: showHandle,
-        backgroundColor: backgroundColor,
+      transitionDuration: const Duration(milliseconds: 280),
+      transitionBuilder: (ctx, a1, a2, child) => SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 1),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: a1, curve: Curves.easeOut)),
         child: child,
+      ),
+      pageBuilder: (ctx, _, _) => _SheetHost(
+        enableDrag: enableDrag,
+        isDismissible: isDismissible,
+        sheet: AppBottomSheet(
+          title: title,
+          subtitle: subtitle,
+          height: height,
+          action: action,
+          footer: footer,
+          withBackgroundTheme: withBackgroundTheme,
+          horizontalInset: horizontalInset,
+          showCloseButton: showCloseButton,
+          showHandle: showHandle,
+          shrinkContent: shrinkContent,
+          backgroundColor: backgroundColor,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+/// Hosts an [AppBottomSheet] inside `showGeneralDialog`. Lifts the sheet
+/// above the keyboard via [AnimatedPadding] and supports drag-to-dismiss.
+class _SheetHost extends StatefulWidget {
+  final Widget sheet;
+  final bool enableDrag;
+  final bool isDismissible;
+
+  const _SheetHost({
+    required this.sheet,
+    required this.enableDrag,
+    required this.isDismissible,
+  });
+
+  @override
+  State<_SheetHost> createState() => _SheetHostState();
+}
+
+class _SheetHostState extends State<_SheetHost> {
+  double _dragOffset = 0;
+
+  void _onDragUpdate(DragUpdateDetails d) {
+    if (!widget.enableDrag) return;
+    final next = _dragOffset + d.delta.dy;
+    if (next < 0) return;
+    setState(() => _dragOffset = next);
+  }
+
+  void _onDragEnd(DragEndDetails d) {
+    if (!widget.enableDrag) return;
+    final velocity = d.primaryVelocity ?? 0;
+    if (_dragOffset > 120 || velocity > 700) {
+      Navigator.of(context).pop();
+      return;
+    }
+    setState(() => _dragOffset = 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    // Material absorbs hits at empty areas (absorbHitTest: true), which
+    // prevents the dialog's barrier from receiving taps. Add an explicit
+    // tap-to-dismiss layer behind the sheet so tapping outside actually
+    // closes the sheet.
+    return Material(
+      color: Colors.transparent,
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.only(bottom: keyboardHeight),
+        child: Stack(
+          children: [
+            if (widget.isDismissible)
+              Positioned.fill(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Navigator.of(context).pop(),
+                ),
+              ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onVerticalDragUpdate: _onDragUpdate,
+                onVerticalDragEnd: _onDragEnd,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 80),
+                  curve: Curves.easeOut,
+                  transform: Matrix4.translationValues(0, _dragOffset, 0),
+                  child: widget.sheet,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

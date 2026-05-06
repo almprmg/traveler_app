@@ -17,13 +17,12 @@ class BottomNavBar extends StatelessWidget {
       () => Padding(
         padding: EdgeInsets.fromLTRB(20, 0, 20, bottom + 16),
         child: Container(
-          height: 64,
           decoration: BoxDecoration(
             color: AppTheme.white,
             borderRadius: BorderRadius.circular(AppTheme.radiusPill),
             border: Border.all(color: AppTheme.cardBorder, width: 1),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           child: Row(
             children: [
               NavItem(

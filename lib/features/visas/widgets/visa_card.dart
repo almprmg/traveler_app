@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/visas/model/visa_model.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_details_button.dart';
+import 'package:traveler_app/widgets/product_image_hero.dart';
 
 class VisaCard extends StatelessWidget {
   final VisaListItem visa;
@@ -19,112 +21,131 @@ class VisaCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radius16),
+          borderRadius: BorderRadius.circular(AppTheme.radius20),
+          border: Border.all(color: AppTheme.cardBorder, width: 0.75),
         ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(AppTheme.radius16),
-              ),
-              child: AppCachedImage(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppTheme.radius20 - 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ProductImageHero(
                 imageUrl: visa.imageUrl,
-                width: 110,
-                height: 130,
-                fit: BoxFit.cover,
+                topEndOverlay: visa.category != null
+                    ? ProductBadgePill(label: visa.category!)
+                    : null,
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (visa.category != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryWithOpacity,
-                          borderRadius:
-                              BorderRadius.circular(AppTheme.radius4),
-                        ),
-                        child: Text(
-                          visa.category!,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    const SizedBox(height: 6),
-                    Text(
-                      visa.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const HugeIcon(
-                          icon: HugeIcons.strokeRoundedLocation01,
-                          size: 13,
-                          color: AppTheme.textTertiary,
-                        ),
-                        const SizedBox(width: 2),
-                        Expanded(
-                          child: Text(
-                            visa.country,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppTheme.textTertiary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    if (visa.validity != null)
-                      Text(
-                        '${'visa_validity'.tr}: ${visa.validity!}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppTheme.textSecondary,
-                        ),
-                      ),
-                    if (visa.processing != null)
-                      Text(
-                        '${'visa_processing'.tr}: ${visa.processing!}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppTheme.textSecondary,
-                        ),
-                      ),
-                    const SizedBox(height: 6),
-                    Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: MoneyWithIcon(
-                        money: visa.cost,
-                        precision: 0,
-                        textSize: 14,
-                        color: AppTheme.primary,
-                      ),
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppTheme.spacing16,
+                  0,
+                  AppTheme.spacing16,
+                  AppTheme.spacing16,
                 ),
+                child: _Body(visa: visa),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _Body extends StatelessWidget {
+  final VisaListItem visa;
+  const _Body({required this.visa});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          visa.title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: AppTypography.bodyLarge.copyWith(
+            color: AppTheme.textPrimary,
+            fontWeight: AppTypography.extraBold,
+            height: 1.3,
+          ),
+        ),
+        const SizedBox(height: AppTheme.spacing4),
+        _CountryRow(country: visa.country),
+        if (visa.validity != null || visa.processing != null) ...[
+          const SizedBox(height: AppTheme.spacing4),
+          _MetaRow(visa: visa),
+        ],
+        const SizedBox(height: AppTheme.spacing12),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: MoneyWithIcon(
+                money: visa.cost,
+                precision: 0,
+                textSize: 16,
+                color: AppTheme.textPrimary,
+                fontWeight: AppTypography.extraBold,
+              ),
+            ),
+            const SizedBox(width: AppTheme.spacing8),
+            const ProductDetailsButton(),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CountryRow extends StatelessWidget {
+  final String country;
+  const _CountryRow({required this.country});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const HugeIcon(
+          icon: HugeIcons.strokeRoundedLocation01,
+          color: AppTheme.textTertiary,
+          size: 12,
+        ),
+        const SizedBox(width: AppTheme.spacing4),
+        Expanded(
+          child: Text(
+            country,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.labelSmall.copyWith(
+              color: AppTheme.textTertiary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MetaRow extends StatelessWidget {
+  final VisaListItem visa;
+  const _MetaRow({required this.visa});
+
+  @override
+  Widget build(BuildContext context) {
+    final parts = <String>[
+      if (visa.validity != null) '${'visa_validity'.tr}: ${visa.validity!}',
+      if (visa.processing != null)
+        '${'visa_processing'.tr}: ${visa.processing!}',
+    ];
+    return Text(
+      parts.join('  •  '),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: AppTypography.labelSmall.copyWith(color: AppTheme.textSecondary),
     );
   }
 }

@@ -101,7 +101,8 @@ class _CartIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleIconButton(
       icon: HugeIcons.strokeRoundedShoppingCart01,
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () {
             if (Get.find<AuthController>().isLoggedIn()) {
               Get.toNamed('/cart');

@@ -22,9 +22,10 @@ class AppTheme {
   static const Color skyTop = Color(0xFF7FBBDD);
   static const Color skyBottom = Color(0xFFD9E8F2);
 
-  static const Color textPrimary = Color(0xFF1F242D);
-  static const Color textSecondary = Color(0xFF4A5260);
-  static const Color textTertiary = Color(0xFF7A8290);
+  // Comfortable neutral text scale: near-black → dark gray → medium gray.
+  static const Color textPrimary = Color(0xFF0A0B0E);
+  static const Color textSecondary = Color(0xFF353944);
+  static const Color textTertiary = Color(0xFF6E7380);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
   static const Color success = Color(0xFF6B8E7A);
