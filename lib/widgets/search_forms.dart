@@ -18,15 +18,7 @@ class _FormCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-        decoration: BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.circular(AppTheme.radius20),
-          border: Border.all(color: AppTheme.cardBorder, width: 1),
-        ),
-        child: child,
-      ),
+      child: child,
     );
   }
 }
@@ -52,7 +44,7 @@ class _FieldButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasValue = value != null && value!.isNotEmpty;
     return Material(
-      color: AppTheme.backgroundLight,
+      color: AppTheme.white,
       borderRadius: BorderRadius.circular(AppTheme.radius12),
       child: InkWell(
         borderRadius: BorderRadius.circular(AppTheme.radius12),

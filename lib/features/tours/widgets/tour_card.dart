@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/tours/model/tour_model.dart';
@@ -37,7 +36,7 @@ class TourCard extends StatelessWidget {
                 topEndOverlay: tour.categoryName != null
                     ? ProductBadgePill(label: tour.categoryName!)
                     : null,
-                bottomEndOverlay: _GhostRatingPill(rating: tour.rating),
+                bottomEndOverlay: GhostRatingPill(rating: tour.rating),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -131,39 +130,3 @@ class _LocationRow extends StatelessWidget {
   }
 }
 
-class _GhostRatingPill extends StatelessWidget {
-  final double rating;
-  const _GhostRatingPill({required this.rating});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppTheme.spacing8,
-        vertical: AppTheme.spacing4,
-      ),
-      decoration: BoxDecoration(
-        color: AppTheme.textPrimary.withValues(alpha: 0.42),
-        borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-        border: Border.all(
-          color: AppTheme.white.withValues(alpha: 0.4),
-          width: 0.75,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SvgPicture.asset("assets/svg/star_icon.svg", width: 14, height: 14),
-          const SizedBox(width: AppTheme.spacing2),
-          Text(
-            rating.toStringAsFixed(1),
-            style: AppTypography.labelSmall.copyWith(
-              color: AppTheme.white,
-              fontWeight: AppTypography.extraBold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

@@ -32,14 +32,16 @@ class HotelCard extends StatelessWidget {
             children: [
               ProductImageHero(
                 imageUrl: hotel.imageUrl,
-                topEndOverlay: ProductRatingPill(rating: hotel.rating),
+                height: 170,
+                fadeHeight: 55,
+                bottomEndOverlay: GhostRatingPill(rating: hotel.rating),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
                   0,
-                  AppTheme.spacing16,
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
+                  AppTheme.spacing12,
                 ),
                 child: _Body(hotel: hotel),
               ),
@@ -63,19 +65,19 @@ class _Body extends StatelessWidget {
       children: [
         Text(
           hotel.name,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTypography.bodyLarge.copyWith(
+          style: AppTypography.bodyMedium.copyWith(
             color: AppTheme.textPrimary,
             fontWeight: AppTypography.extraBold,
-            height: 1.3,
+            height: 1.25,
           ),
         ),
         if (hotel.location != null) ...[
-          const SizedBox(height: AppTheme.spacing4),
+          const SizedBox(height: AppTheme.spacing2),
           _LocationRow(location: hotel.location!),
         ],
-        const SizedBox(height: AppTheme.spacing12),
+        const SizedBox(height: AppTheme.spacing8),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -130,7 +132,7 @@ class _PriceRow extends StatelessWidget {
         MoneyWithIcon(
           money: pricePerNight,
           precision: 0,
-          textSize: 16,
+          textSize: 15,
           color: AppTheme.textPrimary,
           fontWeight: AppTypography.extraBold,
         ),

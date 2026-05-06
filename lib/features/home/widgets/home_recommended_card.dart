@@ -3,21 +3,19 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/features/home/model/home_model.dart';
 import 'package:traveler_app/features/home/widgets/home_arrow_circle.dart';
-import 'package:traveler_app/features/home/widgets/home_image_scrim.dart';
 import 'package:traveler_app/features/home/widgets/home_travelled_badge.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_image_hero.dart';
 
 class HomeRecommendedCard extends StatelessWidget {
   final Tour tour;
   const HomeRecommendedCard({super.key, required this.tour});
 
   static const double _width = 220;
-  static const double _height = 268;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +23,10 @@ class HomeRecommendedCard extends StatelessWidget {
     final travelled = 5000 + Random(seed).nextInt(5001);
 
     return GestureDetector(
-      onTap: () => Get.toNamed(tourDetailRoute, arguments: {'slug': tour.slug}),
+      onTap: () =>
+          Get.toNamed(tourDetailRoute, arguments: {'slug': tour.slug}),
       child: Container(
         width: _width,
-        height: _height,
         decoration: BoxDecoration(
           color: AppTheme.white,
           borderRadius: BorderRadius.circular(AppTheme.radius20),
@@ -36,28 +34,28 @@ class HomeRecommendedCard extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(AppTheme.radius20 - 1),
-          child: Stack(
-            fit: StackFit.expand,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              AppCachedImage(imageUrl: tour.imageUrl, fit: BoxFit.cover),
-              const HomeImageScrim(),
-              const Positioned(
-                top: AppTheme.spacing8,
-                right: AppTheme.spacing8,
-                child: _FavoriteButton(),
+              ProductImageHero(
+                imageUrl: tour.imageUrl,
+                height: 140,
+                fadeHeight: 45,
+                topEndOverlay: const _FavoriteButton(),
               ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(AppTheme.spacing12),
-                  child: _CardBody(
-                    title: tour.title,
-                    location: tour.title,
-                    travelledCount: travelled,
-                    seed: seed,
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppTheme.spacing12,
+                  0,
+                  AppTheme.spacing12,
+                  AppTheme.spacing12,
+                ),
+                child: _CardBody(
+                  title: tour.title,
+                  location: tour.title,
+                  travelledCount: travelled,
+                  seed: seed,
                 ),
               ),
             ],
@@ -110,15 +108,15 @@ class _CardBody extends StatelessWidget {
       children: [
         Text(
           title,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: AppTypography.bodyMedium.copyWith(
             color: AppTheme.textPrimary,
-            fontWeight: AppTypography.bold,
-            height: 1.3,
+            fontWeight: AppTypography.extraBold,
+            height: 1.25,
           ),
         ),
-        const SizedBox(height: AppTheme.spacing4),
+        const SizedBox(height: AppTheme.spacing2),
         _LocationRow(location: location),
         const SizedBox(height: AppTheme.spacing8),
         Row(

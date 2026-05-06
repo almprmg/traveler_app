@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/visas/model/visa_model.dart';
@@ -32,16 +31,18 @@ class VisaCard extends StatelessWidget {
             children: [
               ProductImageHero(
                 imageUrl: visa.imageUrl,
+                height: 170,
+                fadeHeight: 55,
                 topEndOverlay: visa.category != null
                     ? ProductBadgePill(label: visa.category!)
                     : null,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
                   0,
-                  AppTheme.spacing16,
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
+                  AppTheme.spacing12,
                 ),
                 child: _Body(visa: visa),
               ),
@@ -65,21 +66,17 @@ class _Body extends StatelessWidget {
       children: [
         Text(
           visa.title,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTypography.bodyLarge.copyWith(
+          style: AppTypography.bodyMedium.copyWith(
             color: AppTheme.textPrimary,
             fontWeight: AppTypography.extraBold,
-            height: 1.3,
+            height: 1.25,
           ),
         ),
-        const SizedBox(height: AppTheme.spacing4),
+        const SizedBox(height: AppTheme.spacing2),
         _CountryRow(country: visa.country),
-        if (visa.validity != null || visa.processing != null) ...[
-          const SizedBox(height: AppTheme.spacing4),
-          _MetaRow(visa: visa),
-        ],
-        const SizedBox(height: AppTheme.spacing12),
+        const SizedBox(height: AppTheme.spacing8),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -87,7 +84,7 @@ class _Body extends StatelessWidget {
               child: MoneyWithIcon(
                 money: visa.cost,
                 precision: 0,
-                textSize: 16,
+                textSize: 15,
                 color: AppTheme.textPrimary,
                 fontWeight: AppTypography.extraBold,
               ),
@@ -126,26 +123,6 @@ class _CountryRow extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _MetaRow extends StatelessWidget {
-  final VisaListItem visa;
-  const _MetaRow({required this.visa});
-
-  @override
-  Widget build(BuildContext context) {
-    final parts = <String>[
-      if (visa.validity != null) '${'visa_validity'.tr}: ${visa.validity!}',
-      if (visa.processing != null)
-        '${'visa_processing'.tr}: ${visa.processing!}',
-    ];
-    return Text(
-      parts.join('  •  '),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: AppTypography.labelSmall.copyWith(color: AppTheme.textSecondary),
     );
   }
 }

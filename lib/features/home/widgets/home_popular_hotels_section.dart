@@ -10,7 +10,7 @@ class HomePopularHotelsSection extends StatelessWidget {
   final List<Hotel> hotels;
   const HomePopularHotelsSection({super.key, required this.hotels});
 
-  static const double _listHeight = 250;
+  static const double _listHeight = 230;
 
   @override
   Widget build(BuildContext context) {
