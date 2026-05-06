@@ -339,9 +339,6 @@ class ApiClient extends GetxService {
         ),
       );
 
-      request.fields['name'] = fileName;
-      request.fields['path'] = additionalFields?['path'] ?? 'img';
-
       if (additionalFields != null) {
         request.fields.addAll(additionalFields);
         if (kDebugMode) {

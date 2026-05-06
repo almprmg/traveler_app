@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -52,7 +51,7 @@ class ProfileScreen extends StatelessWidget {
       imageQuality: 85,
     );
     if (picked == null) return;
-    final ok = await c.uploadAvatar(File(picked.path));
+    final ok = await c.uploadAvatar(picked);
     if (!ok) {
       Get.snackbar(
         'profile'.tr,

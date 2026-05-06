@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:traveler_app/features/auth/service/auth_service.dart';
 import 'package:traveler_app/features/profile/model/profile_model.dart';
 import 'package:traveler_app/features/profile/service/profile_service.dart';
@@ -47,7 +47,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  Future<bool> uploadAvatar(File file) async {
+  Future<bool> uploadAvatar(XFile file) async {
     isUploadingAvatar.value = true;
     try {
       final url = await profileService.uploadAvatar(file);

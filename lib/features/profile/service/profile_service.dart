@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:traveler_app/data/api/api_client.dart';
 import 'package:traveler_app/features/profile/model/profile_model.dart';
 import 'package:traveler_app/util/app_constants.dart';
@@ -35,11 +35,15 @@ class ProfileService extends GetxService {
   }
 
   /// Uploads avatar; returns the new avatar URL on success.
-  Future<String?> uploadAvatar(File file) async {
-    final response = await apiClient.uploadFile(
+  Future<String?> uploadAvatar(XFile file) async {
+    final bytes = await file.readAsBytes();
+    final fileName = file.name.isNotEmpty ? file.name : 'avatar.jpg';
+    final response = await apiClient.uploadBytes(
       '${AppConstants.profileUrl}/avatar',
-      file,
-      fieldName: 'avatar',
+      bytes,
+      fileName,
+      fieldName: 'file',
+      isImage: true,
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = json.decode(response.body);

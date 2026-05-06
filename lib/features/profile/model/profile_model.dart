@@ -20,7 +20,7 @@ class ProfileModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
-      avatar: data['avatar_url'] ?? data['avatar'],
+      avatar: data['avatar_url']?.toString() ?? data['avatar']?.toString(),
     );
   }
 }
