@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:traveler_app/controllers/auth_controller.dart';
 import 'package:traveler_app/features/auth/model/auth_model.dart';
 import 'package:traveler_app/features/auth/service/auth_service.dart';
+import 'package:traveler_app/features/profile/controller/profile_controller.dart';
+import 'package:traveler_app/features/profile/model/profile_model.dart';
 import 'package:traveler_app/routes.dart';
 
 class AuthOtpController extends GetxController {
@@ -39,16 +41,20 @@ class AuthOtpController extends GetxController {
         // Phone login flow
         final result = await _authService.loginWithOtp('+966$phone', otp);
         if (result != null && result['success'] == true) {
-          final data = result['data'];
-          if (data != null && data['token'] != null) {
-            final authResponse = AuthResponse.fromJson(data);
-            await Get.find<AuthController>().saveToken(authResponse.token);
-            final user = authResponse.user;
-            if (user.name.isEmpty || user.email.isEmpty) {
-              Get.offAllNamed(editProfileRoute, arguments: {'setup': true});
-            } else {
-              Get.offAllNamed(navRoute);
-            }
+          final authResponse = AuthResponse.fromJson(
+            (result['data'] as Map<String, dynamic>?) ?? result,
+          );
+          await Get.find<AuthController>().saveToken(authResponse.token);
+          final user = authResponse.user;
+          Get.find<ProfileController>().profile.value = ProfileModel(
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            avatar: user.avatar,
+          );
+          if (user.name.isEmpty || user.email.isEmpty) {
+            Get.offAllNamed(editProfileRoute, arguments: {'setup': true});
           } else {
             Get.offAllNamed(navRoute);
           }

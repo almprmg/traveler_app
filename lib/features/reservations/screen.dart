@@ -44,16 +44,14 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   Widget _buildList() {
     return Column(
       children: [
-        Obx(
-          () => Container(
-            color: AppTheme.white,
-            child: Row(
-              children: [
-                _tabItem('upcoming'.tr, 0),
-                _tabItem('completed'.tr, 1),
-                _tabItem('cancelled'.tr, 2),
-              ],
-            ),
+        Container(
+          color: AppTheme.white,
+          child: Row(
+            children: [
+              _tabItem('upcoming'.tr, 0),
+              _tabItem('completed'.tr, 1),
+              _tabItem('cancelled'.tr, 2),
+            ],
           ),
         ),
         Expanded(
