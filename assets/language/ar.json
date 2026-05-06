@@ -282,5 +282,10 @@
   "start_journey": "ابدأ رحلتك",
   "special_offers": "العروض المميزة",
   "top_destinations": "أبرز الوجهات",
-  "popular_hotels": "أفضل الفنادق"
+  "popular_hotels": "أفضل الفنادق",
+  "change_phone_number": "تغيير رقم الهاتف",
+  "complete_profile": "أكمل ملفك الشخصي",
+  "complete_profile_subtitle": "يرجى ملء بياناتك للبدء",
+  "otp_invalid": "الرمز غير صحيح أو منتهي الصلاحية. حاول مرة أخرى.",
+  "error_try_again": "حدث خطأ ما. حاول مرة أخرى."
 }

@@ -21,10 +21,12 @@ class ProfileService extends GetxService {
   Future<ProfileModel?> updateProfile({
     required String name,
     required String phone,
+    String? email,
   }) async {
     final response = await apiClient.putData(AppConstants.profileUrl, {
       'name': name,
       'phone': phone,
+      if (email != null && email.isNotEmpty) 'email': email,
     });
     if (response.statusCode == 200) {
       return ProfileModel.fromJson(json.decode(response.body));

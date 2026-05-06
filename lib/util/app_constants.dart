@@ -13,6 +13,9 @@ class AppConstants {
   // Auth
   static const String loginUrl = '${apiUrl}auth/login';
   static const String registerUrl = '${apiUrl}auth/register';
+  static const String sendOtpUrl = '${apiUrl}auth/send-otp';
+  static const String loginOtpUrl = '${apiUrl}auth/login-otp';
+  static const String verifyOtpUrl = '${apiUrl}auth/verify-otp';
   static const String otpVerifyUrl = '${apiUrl}auth/otp/verify';
   static const String otpResendUrl = '${apiUrl}auth/otp/resend';
   static const String forgotPasswordUrl = '${apiUrl}auth/password/forgot';

@@ -1,11 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gap/gap.dart';
 import 'package:traveler_app/base/app_button.dart';
-import 'package:traveler_app/base/app_text_field.dart';
 import 'package:traveler_app/features/auth/controller/auth_login_controller.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -14,98 +14,196 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = Get.find<AuthLoginController>();
     return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Form(
-            key: c.formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 24),
-                Text(
-                  'welcome_back'.tr,
-                  style: AppTypography.h2.copyWith(
-                    color: AppTheme.textPrimary,
+      body: SizedBox(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/images/sky_background.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+            SafeArea(
+              bottom: false,
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppTheme.spacing24,
+                    vertical: 80,
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'explore_the_world'.tr,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                AppTextField(
-                  controller: c.emailController,
-                  labelText: 'email_label'.tr,
-                  hintText: 'email_hint'.tr,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedMail01, size: 20),
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'email_required'.tr;
-                    if (!GetUtils.isEmail(v)) return 'email_invalid'.tr;
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                Obx(
-                  () => AppTextField(
-                    controller: c.passwordController,
-                    labelText: 'password_label'.tr,
-                    hintText: 'password_hint'.tr,
-                    obscureText: c.obscurePassword.value,
-                    prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedLockKey, size: 20),
-                    suffixIcon: IconButton(icon: HugeIcon(icon: c.obscurePassword.value
-                             ? HugeIcons.strokeRoundedView : HugeIcons.strokeRoundedViewOff, size: 20),
-                      onPressed: () =>
-                          c.obscurePassword.value = !c.obscurePassword.value,
-                    ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'password_required'.tr;
-                      if (v.length < 8) return 'password_min_length'.tr;
-                      return null;
-                    },
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: TextButton(
-                    onPressed: c.goToForgotPassword,
-                    child: Text('forgot_password'.tr),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Obx(
-                  () => AppButton(
-                    text: 'login'.tr,
-                    onPressed: c.isLoading.value ? null : c.login,
-                    isLoading: c.isLoading.value,
-                    width: double.infinity,
-                    size: ButtonSize.large,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'dont_have_account'.tr,
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppTheme.textSecondary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppTheme.white.withValues(alpha: 0.4),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(
+                            color: AppTheme.white,
+                            width: 1,
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(AppTheme.spacing24),
+                        child: Form(
+                          key: c.formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'welcome_back'.tr,
+                                style: AppTypography.h2,
+                                textAlign: TextAlign.center,
+                              ),
+                              const Gap(AppTheme.spacing8),
+                              Text(
+                                'explore_the_world'.tr,
+                                style: AppTypography.bodyMedium.copyWith(
+                                  color: AppTheme.textSecondary,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const Gap(AppTheme.spacing32),
+                              Directionality(
+                                textDirection: TextDirection.ltr,
+                                child: IntrinsicHeight(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: AppTheme.spacing12,
+                                          vertical: AppTheme.spacing12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.white,
+                                          border: Border.all(
+                                            color: AppTheme.border,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          '+966',
+                                          style: AppTypography.bodyMedium
+                                              .copyWith(
+                                                color: AppTheme.textPrimary,
+                                              ),
+                                        ),
+                                      ),
+                                      const Gap(AppTheme.spacing4),
+                                      Expanded(
+                                        child: TextFormField(
+                                          controller: c.phoneController,
+                                          keyboardType: TextInputType.phone,
+                                          textDirection: TextDirection.ltr,
+                                          maxLength: 9,
+                                          decoration: InputDecoration(
+                                            hintText: '5XXXXXXXX',
+                                            counterText: '',
+                                            filled: true,
+                                            fillColor: AppTheme.white,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      AppTheme.spacing16,
+                                                  vertical: AppTheme.spacing12,
+                                                ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              borderSide: BorderSide(
+                                                color: AppTheme.border,
+                                              ),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              borderSide: BorderSide(
+                                                color: AppTheme.border,
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              borderSide: const BorderSide(
+                                                color: AppTheme.primary,
+                                                width: 1.5,
+                                              ),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              borderSide: const BorderSide(
+                                                color: AppTheme.error,
+                                              ),
+                                            ),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  borderSide: const BorderSide(
+                                                    color: AppTheme.error,
+                                                    width: 1.5,
+                                                  ),
+                                                ),
+                                          ),
+                                          validator: (v) {
+                                            if (v == null || v.trim().isEmpty) {
+                                              return 'phone_required'.tr;
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const Gap(AppTheme.spacing16),
+                              Obx(() {
+                                if (c.errorMessage.value == null) {
+                                  return const SizedBox.shrink();
+                                }
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Text(
+                                    c.errorMessage.value!,
+                                    style: AppTypography.bodySmall.copyWith(
+                                      color: AppTheme.error,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              }),
+                              const Gap(AppTheme.spacing8),
+                              Obx(
+                                () => AppButton(
+                                  text: 'send_otp'.tr,
+                                  type: ButtonType.gradient,
+                                  size: ButtonSize.medium,
+                                  width: double.infinity,
+                                  borderRadius: AppTheme.radiusPill,
+                                  onPressed:
+                                      c.isLoading.value ? null : c.sendOtp,
+                                  isLoading: c.isLoading.value,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    TextButton(
-                      onPressed: c.goToRegister,
-                      child: Text('register'.tr),
-                    ),
-                  ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

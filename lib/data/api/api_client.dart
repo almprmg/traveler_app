@@ -99,7 +99,7 @@ class ApiClient extends GetxService {
 
       if (kDebugMode) {
         AppLogger.network(
-          '====> API Response: [${response.statusCode}] $uri\n${response.body} \n provider-id: ${localStorageService.getCustomerId()}',
+          '====> API Response: [${response.statusCode}] $uri\n${response.body} \n customer-id: ${localStorageService.getCustomerId()}',
         );
       }
 

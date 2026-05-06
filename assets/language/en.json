@@ -281,5 +281,10 @@
   "start_journey": "Start Journey",
   "special_offers": "Special Offers",
   "top_destinations": "Top Destinations",
-  "popular_hotels": "Popular Hotels"
+  "popular_hotels": "Popular Hotels",
+  "change_phone_number": "Change Phone Number",
+  "complete_profile": "Complete Profile",
+  "complete_profile_subtitle": "Please fill in your details to get started",
+  "otp_invalid": "Invalid or expired code. Please try again.",
+  "error_try_again": "Something went wrong. Please try again."
 }

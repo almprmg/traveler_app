@@ -8,6 +8,28 @@ class AuthService extends GetxService {
 
   AuthService({required this.apiClient});
 
+  Future<Map<String, dynamic>?> sendOtp(String phone) async {
+    final response = await apiClient.postData(
+      AppConstants.sendOtpUrl,
+      {'phone': phone},
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body) as Map<String, dynamic>;
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> loginWithOtp(String phone, String otp) async {
+    final response = await apiClient.postData(
+      AppConstants.loginOtpUrl,
+      {'phone': phone, 'otp': otp},
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body) as Map<String, dynamic>;
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> login(String email, String password) async {
     final response = await apiClient.postData(AppConstants.loginUrl, {
       'email': email,
