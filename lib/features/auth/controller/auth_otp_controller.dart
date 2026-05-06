@@ -12,28 +12,49 @@ class AuthOtpController extends GetxController {
 
   final isLoading = false.obs;
   final isResending = false.obs;
+  final errorMessage = Rxn<String>();
 
-  String get email => (Get.arguments as Map?)?['email'] ?? '';
-  String get mode => (Get.arguments as Map?)?['mode'] ?? 'verify';
+  String get phone => (Get.arguments as Map?)?['phone'] ?? '';
+  String get mode => (Get.arguments as Map?)?['mode'] ?? 'login';
 
   Future<void> verify(String otp) async {
-    if (otp.length < 4) return;
+    if (otp.length < 4 || otp.length != 4) return;
     isLoading.value = true;
+    errorMessage.value = null;
     try {
-      final result = await _authService.verifyOtp(email, otp);
-      if (result != null && result['success'] == true) {
-        if (mode == 'reset') {
+      if (mode == 'reset') {
+        // Forgot password OTP — keep existing email-based reset flow
+        final email = (Get.arguments as Map?)?['email'] ?? '';
+        final result = await _authService.verifyOtp(email, otp);
+        if (result != null && result['success'] == true) {
           Get.toNamed(
             resetPasswordRoute,
             arguments: {'email': email, 'otp': otp},
           );
         } else {
+          errorMessage.value =
+              result?['message']?.toString() ?? 'otp_invalid'.tr;
+        }
+      } else {
+        // Phone login flow
+        final result = await _authService.loginWithOtp('+966$phone', otp);
+        if (result != null && result['success'] == true) {
           final data = result['data'];
           if (data != null && data['token'] != null) {
             final authResponse = AuthResponse.fromJson(data);
             await Get.find<AuthController>().saveToken(authResponse.token);
+            final user = authResponse.user;
+            if (user.name.isEmpty || user.email.isEmpty) {
+              Get.offAllNamed(editProfileRoute, arguments: {'setup': true});
+            } else {
+              Get.offAllNamed(navRoute);
+            }
+          } else {
+            Get.offAllNamed(navRoute);
           }
-          Get.offAllNamed(navRoute);
+        } else {
+          errorMessage.value =
+              result?['message']?.toString() ?? 'otp_invalid'.tr;
         }
       }
     } finally {
@@ -43,8 +64,14 @@ class AuthOtpController extends GetxController {
 
   Future<void> resend() async {
     isResending.value = true;
+    errorMessage.value = null;
     try {
-      await _authService.resendOtp(email);
+      if (mode == 'reset') {
+        final email = (Get.arguments as Map?)?['email'] ?? '';
+        await _authService.resendOtp(email);
+      } else {
+        await _authService.sendOtp('+966$phone');
+      }
     } finally {
       isResending.value = false;
     }

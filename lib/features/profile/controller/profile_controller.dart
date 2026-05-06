@@ -32,12 +32,14 @@ class ProfileController extends GetxController {
   Future<void> updateProfile({
     required String name,
     required String phone,
+    String? email,
   }) async {
     isLoading.value = true;
     try {
       final updated = await profileService.updateProfile(
         name: name,
         phone: phone,
+        email: email,
       );
       if (updated != null) profile.value = updated;
     } finally {
