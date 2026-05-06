@@ -12,8 +12,7 @@ import 'package:traveler_app/util/app_theme.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  Future<void> _pickAvatar(
-      BuildContext context, ProfileController c) async {
+  Future<void> _pickAvatar(BuildContext context, ProfileController c) async {
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
       backgroundColor: AppTheme.white,
@@ -55,13 +54,19 @@ class ProfileScreen extends StatelessWidget {
     if (picked == null) return;
     final ok = await c.uploadAvatar(File(picked.path));
     if (!ok) {
-      Get.snackbar('profile'.tr, 'avatar_upload_failed'.tr,
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'profile'.tr,
+        'avatar_upload_failed'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
   Future<void> _confirmDelete(
-      BuildContext context, ProfileController c, AuthController auth) async {
+    BuildContext context,
+    ProfileController c,
+    AuthController auth,
+  ) async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
@@ -88,8 +93,11 @@ class ProfileScreen extends StatelessWidget {
       await auth.logout();
       Get.offAllNamed(loginRoute);
     } else {
-      Get.snackbar('profile'.tr, 'delete_account_failed'.tr,
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'profile'.tr,
+        'delete_account_failed'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -119,10 +127,16 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const HugeIcon(icon: HugeIcons.strokeRoundedUser, size: 64, color: Colors.grey),
+                const HugeIcon(
+                  icon: HugeIcons.strokeRoundedUser,
+                  size: 64,
+                  color: Colors.grey,
+                ),
                 const SizedBox(height: 16),
-                Text('login_to_view_profile'.tr,
-                    style: const TextStyle(color: AppTheme.textSecondary)),
+                Text(
+                  'login_to_view_profile'.tr,
+                  style: const TextStyle(color: AppTheme.textSecondary),
+                ),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => Get.toNamed(loginRoute),
@@ -143,9 +157,7 @@ class ProfileScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 32),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.white,
-                  ),
+                  decoration: const BoxDecoration(color: AppTheme.white),
                   child: Column(
                     children: [
                       Stack(
@@ -183,23 +195,26 @@ class ProfileScreen extends StatelessWidget {
                                 decoration: const BoxDecoration(
                                   color: AppTheme.primary,
                                   shape: BoxShape.circle,
-                                  border: Border.fromBorderSide(BorderSide(
-                                      color: AppTheme.white, width: 2)),
+                                  border: Border.fromBorderSide(
+                                    BorderSide(color: AppTheme.white, width: 2),
+                                  ),
                                 ),
-                                child: Obx(() => c.isUploadingAvatar.value
-                                    ? const SizedBox(
-                                        width: 14,
-                                        height: 14,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
+                                child: Obx(
+                                  () => c.isUploadingAvatar.value
+                                      ? const SizedBox(
+                                          width: 14,
+                                          height: 14,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: AppTheme.white,
+                                          ),
+                                        )
+                                      : const HugeIcon(
+                                          icon: HugeIcons.strokeRoundedCamera01,
                                           color: AppTheme.white,
+                                          size: 14,
                                         ),
-                                      )
-                                    : const HugeIcon(
-                                        icon: HugeIcons.strokeRoundedCamera01,
-                                        color: AppTheme.white,
-                                        size: 14,
-                                      )),
+                                ),
                               ),
                             ),
                           ),
@@ -235,25 +250,33 @@ class ProfileScreen extends StatelessWidget {
                   icon: HugeIcons.strokeRoundedFavourite,
                   title: 'wishlist'.tr,
                   onTap: () => Get.toNamed(wishlistRoute),
-                  trailing: const HugeIcon(icon: HugeIcons.strokeRoundedArrowRight01),
+                  trailing: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedArrowRight01,
+                  ),
                 ),
                 _tile(
                   icon: HugeIcons.strokeRoundedWallet01,
                   title: 'wallet'.tr,
                   onTap: () => Get.toNamed(walletRoute),
-                  trailing: const HugeIcon(icon: HugeIcons.strokeRoundedArrowRight01),
+                  trailing: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedArrowRight01,
+                  ),
                 ),
                 _tile(
                   icon: HugeIcons.strokeRoundedClock01,
                   title: 'reservations'.tr,
                   onTap: () => Get.toNamed(reservationsRoute),
-                  trailing: const HugeIcon(icon: HugeIcons.strokeRoundedArrowRight01),
+                  trailing: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedArrowRight01,
+                  ),
                 ),
                 _tile(
                   icon: HugeIcons.strokeRoundedSmartPhone01,
                   title: 'esim'.tr,
                   onTap: () => Get.toNamed(esimRoute),
-                  trailing: const HugeIcon(icon: HugeIcons.strokeRoundedArrowRight01),
+                  trailing: const HugeIcon(
+                    icon: HugeIcons.strokeRoundedArrowRight01,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 _tile(
