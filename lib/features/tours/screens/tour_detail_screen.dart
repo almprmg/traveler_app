@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/product_detail_widgets.dart';
+import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/tours/controller/tour_detail_controller.dart';
+import 'package:traveler_app/features/tours/model/tour_model.dart';
 import 'package:traveler_app/routes.dart';
+import 'package:traveler_app/util/app_constants.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_detail_layout.dart';
 
 class TourDetailScreen extends StatelessWidget {
   const TourDetailScreen({super.key});
@@ -14,115 +16,22 @@ class TourDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.find<TourDetailController>();
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: Obx(() {
-        if (c.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final tour = c.tour.value;
-        if (tour == null) return DetailErrorView(onRetry: c.fetch);
-
-        return CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: ProductHero(
-                imageUrl: tour.imageUrl,
-                title: 'summary'.tr,
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: ProductTitleCard(
-                title: tour.title,
-                location: tour.location ?? tour.destination,
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: ProductStatsRow(
-                stats: [
-                  if (tour.duration != null)
-                    (label: 'duration'.tr, value: tour.duration!),
-                  (
-                    label: 'rating'.tr,
-                    value: tour.rating.toStringAsFixed(1),
-                  ),
-                  (label: 'reviews'.tr, value: '${tour.reviewsCount}'),
-                ],
-              ),
-            ),
-            if (tour.description.isNotEmpty)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 8,
-                  ),
-                  child: HtmlWidget(
-                    tour.description,
-                    textStyle: AppTypography.bodyMedium.copyWith(
-                      color: AppTheme.textSecondary,
-                      height: 1.6,
-                    ),
-                  ),
-                ),
-              ),
-            if (tour.gallery.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailGalleryStrip(images: tour.gallery),
-              ),
-            if (tour.includes.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'includes'.tr,
-                  child: BulletList(
-                    items: tour.includes,
-                    hugeIcon: HugeIcons.strokeRoundedCheckmarkCircle02,
-                    iconColor: AppTheme.success,
-                  ),
-                ),
-              ),
-            if (tour.excludes.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'excludes'.tr,
-                  child: BulletList(
-                    items: tour.excludes,
-                    hugeIcon: HugeIcons.strokeRoundedCancel01,
-                    iconColor: AppTheme.error,
-                  ),
-                ),
-              ),
-            if (tour.itinerary.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'itinerary'.tr,
-                  child: DetailFaqList(
-                    items: tour.itinerary
-                        .map((i) => (title: i.title, content: i.content))
-                        .toList(),
-                  ),
-                ),
-              ),
-            if (tour.faqs.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'faqs'.tr,
-                  child: DetailFaqList(
-                    items: tour.faqs
-                        .map((f) => (title: f.title, content: f.content))
-                        .toList(),
-                  ),
-                ),
-              ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
-          ],
-        );
-      }),
-      bottomNavigationBar: Obx(() {
-        final tour = c.tour.value;
-        if (tour == null) return const SizedBox.shrink();
-        return StartJourneyBar(
-          buttonLabel: 'start_journey'.tr,
+    return Obx(() {
+      if (c.isLoading.value) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      }
+      final tour = c.tour.value;
+      if (tour == null) {
+        return Scaffold(body: ProductDetailErrorState(onRetry: c.fetch));
+      }
+      return ProductDetailLayout(
+        imageUrl: tour.imageUrl,
+        shareTitle: tour.title,
+        shareUrl: '${AppConstants.baseUrl}/tours/${tour.slug}',
+        bottomBar: ProductDetailBookingBar(
+          priceLabel: 'price_per_person'.tr,
+          price: tour.price,
+          buttonLabel: 'book_now'.tr,
           onPressed: () => Get.toNamed(
             bookingCreateRoute,
             arguments: {
@@ -132,8 +41,110 @@ class TourDetailScreen extends StatelessWidget {
               'unit_price': tour.price,
             },
           ),
-        );
-      }),
+        ),
+        child: _TourContent(tour: tour),
+      );
+    });
+  }
+}
+
+class _TourContent extends StatelessWidget {
+  final TourDetail tour;
+  const _TourContent({required this.tour});
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = [tour.location, tour.destination]
+        .where((s) => s != null && s.isNotEmpty)
+        .join(' • ');
+    final chips = <String>[
+      if (tour.duration != null) tour.duration!,
+      if (tour.categoryName != null) tour.categoryName!,
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ProductDetailTitleRow(
+          title: tour.title,
+          trailing: MoneyWithIcon(
+            money: tour.price,
+            precision: 0,
+            textSize: 18,
+            color: AppTheme.textPrimary,
+            fontWeight: AppTypography.extraBold,
+          ),
+        ),
+        const SizedBox(height: AppTheme.spacing4),
+        ProductDetailSubtitle(subtitle),
+        if (tour.gallery.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailGallery(images: tour.gallery),
+        ],
+        if (chips.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('property_details'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailChips(labels: chips),
+        ],
+        if (tour.description.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailExpandableDescription(html: tour.description),
+        ],
+        if (tour.includes.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('includes'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailBulletList(
+            items: tour.includes,
+            icon: HugeIcons.strokeRoundedCheckmarkCircle02,
+            iconColor: AppTheme.success,
+          ),
+        ],
+        if (tour.excludes.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailSectionHeader('excludes'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailBulletList(
+            items: tour.excludes,
+            icon: HugeIcons.strokeRoundedCancel01,
+            iconColor: AppTheme.error,
+          ),
+        ],
+        if (tour.itinerary.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('itinerary'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ...tour.itinerary.map((i) => ProductDetailFaqItem(
+                title: i.title,
+                content: i.content,
+              )),
+        ],
+        if (tour.faqs.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailSectionHeader('faqs'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ...tour.faqs.map((f) => ProductDetailFaqItem(
+                title: f.title,
+                content: f.content,
+              )),
+        ],
+        const SizedBox(height: AppTheme.spacing24),
+        ProductDetailSectionHeader('rating_and_reviews'.tr),
+        const SizedBox(height: AppTheme.spacing8),
+        ProductDetailRatingSummary(
+          rating: tour.rating,
+          reviewsCount: tour.reviewsCount,
+        ),
+        if (tour.reviews.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ...tour.reviews.take(3).map((r) => ProductDetailReviewCard(
+                userName: r.userName,
+                rating: r.rating,
+                comment: r.comment,
+              )),
+        ],
+      ],
     );
   }
 }

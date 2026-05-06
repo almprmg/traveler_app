@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:traveler_app/base/product_detail_widgets.dart';
+import 'package:traveler_app/base/money_icon.dart';
 import 'package:traveler_app/features/visas/controller/visas_controller.dart';
+import 'package:traveler_app/features/visas/model/visa_model.dart';
 import 'package:traveler_app/routes.dart';
+import 'package:traveler_app/util/app_constants.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
+import 'package:traveler_app/widgets/product_detail_layout.dart';
 
 class VisaDetailScreen extends StatelessWidget {
   const VisaDetailScreen({super.key});
@@ -13,119 +16,21 @@ class VisaDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = Get.find<VisaDetailController>();
-    return Scaffold(
-      backgroundColor: AppTheme.background,
-      body: Obx(() {
-        if (c.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final v = c.visa.value;
-        if (v == null) return DetailErrorView(onRetry: c.fetch);
-        return CustomScrollView(
-          slivers: [
-            ProductHeroSliver(imageUrl: v.bannerUrl ?? v.imageUrl),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 6,
-                      children: [
-                        if (v.category != null) DetailBadge(text: v.category!),
-                        if (v.visaMode != null)
-                          DetailBadge(
-                            text: v.visaMode!,
-                            color: AppTheme.success,
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Text(v.title, style: AppTypography.h2),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        const HugeIcon(
-                          icon: HugeIcons.strokeRoundedLocation01,
-                          color: AppTheme.textTertiary,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          v.country,
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: AppTheme.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: DetailSection(
-                title: 'visa_info'.tr,
-                child: Column(
-                  children: [
-                    if (v.validity != null)
-                      _InfoRow(
-                        label: 'visa_validity'.tr,
-                        value: v.validity!,
-                      ),
-                    if (v.processing != null)
-                      _InfoRow(
-                        label: 'visa_processing'.tr,
-                        value: v.processing!,
-                      ),
-                    if (v.maximumStay != null)
-                      _InfoRow(
-                        label: 'visa_max_stay'.tr,
-                        value: v.maximumStay!,
-                      ),
-                    if (v.visaMode != null)
-                      _InfoRow(
-                        label: 'visa_mode_label'.tr,
-                        value: v.visaMode!,
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            if (v.includes.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'includes'.tr,
-                  child: BulletList(
-                    items: v.includes,
-                    hugeIcon: HugeIcons.strokeRoundedCheckmarkCircle02,
-                    iconColor: AppTheme.success,
-                  ),
-                ),
-              ),
-            if (v.faqs.isNotEmpty)
-              SliverToBoxAdapter(
-                child: DetailSection(
-                  title: 'faqs'.tr,
-                  child: DetailFaqList(
-                    items: v.faqs
-                        .map((f) => (title: f.title, content: f.content))
-                        .toList(),
-                  ),
-                ),
-              ),
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
-          ],
-        );
-      }),
-      bottomNavigationBar: Obx(() {
-        final v = c.visa.value;
-        if (v == null) return const SizedBox.shrink();
-        return BookNowBar(
-          price: v.cost,
+    return Obx(() {
+      if (c.isLoading.value) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      }
+      final v = c.visa.value;
+      if (v == null) {
+        return Scaffold(body: ProductDetailErrorState(onRetry: c.fetch));
+      }
+      return ProductDetailLayout(
+        imageUrl: v.bannerUrl ?? v.imageUrl,
+        shareTitle: v.title,
+        shareUrl: '${AppConstants.baseUrl}/visas/${v.slug}',
+        bottomBar: ProductDetailBookingBar(
           priceLabel: 'visa_cost'.tr,
+          price: v.cost,
           buttonLabel: 'apply_now'.tr,
           onPressed: () => Get.toNamed(
             bookingCreateRoute,
@@ -136,8 +41,76 @@ class VisaDetailScreen extends StatelessWidget {
               'unit_price': v.cost,
             },
           ),
-        );
-      }),
+        ),
+        child: _VisaContent(visa: v),
+      );
+    });
+  }
+}
+
+class _VisaContent extends StatelessWidget {
+  final VisaDetail visa;
+  const _VisaContent({required this.visa});
+
+  @override
+  Widget build(BuildContext context) {
+    final chips = <String>[
+      if (visa.category != null) visa.category!,
+      if (visa.visaMode != null) visa.visaMode!,
+    ];
+    final infoRows = <(String, String)>[
+      if (visa.validity != null) ('visa_validity'.tr, visa.validity!),
+      if (visa.processing != null) ('visa_processing'.tr, visa.processing!),
+      if (visa.maximumStay != null) ('visa_max_stay'.tr, visa.maximumStay!),
+      if (visa.visaMode != null) ('visa_mode_label'.tr, visa.visaMode!),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ProductDetailTitleRow(
+          title: visa.title,
+          trailing: MoneyWithIcon(
+            money: visa.cost,
+            precision: 0,
+            textSize: 18,
+            color: AppTheme.textPrimary,
+            fontWeight: AppTypography.extraBold,
+          ),
+        ),
+        const SizedBox(height: AppTheme.spacing4),
+        ProductDetailSubtitle(visa.country),
+        if (chips.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing16),
+          ProductDetailChips(labels: chips),
+        ],
+        if (infoRows.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('visa_info'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          for (final row in infoRows)
+            _InfoRow(label: row.$1, value: row.$2),
+        ],
+        if (visa.includes.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('includes'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ProductDetailBulletList(
+            items: visa.includes,
+            icon: HugeIcons.strokeRoundedCheckmarkCircle02,
+            iconColor: AppTheme.success,
+          ),
+        ],
+        if (visa.faqs.isNotEmpty) ...[
+          const SizedBox(height: AppTheme.spacing24),
+          ProductDetailSectionHeader('faqs'.tr),
+          const SizedBox(height: AppTheme.spacing12),
+          ...visa.faqs.map((f) => ProductDetailFaqItem(
+                title: f.title,
+                content: f.content,
+              )),
+        ],
+      ],
     );
   }
 }
@@ -150,21 +123,22 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: AppTheme.spacing6),
       child: Row(
         children: [
           Expanded(
             child: Text(
               label,
-              style: AppTypography.bodyMedium.copyWith(
+              style: AppTypography.bodySmall.copyWith(
                 color: AppTheme.textTertiary,
               ),
             ),
           ),
           Text(
             value,
-            style: AppTypography.bodyMedium.copyWith(
-              fontWeight: FontWeight.w700,
+            style: AppTypography.bodySmall.copyWith(
+              color: AppTheme.textPrimary,
+              fontWeight: AppTypography.bold,
             ),
           ),
         ],
