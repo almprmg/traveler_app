@@ -89,7 +89,7 @@ class AppBottomSheet extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: AssetImage('assets/images/sunny_sky.webp'),
+              image: AssetImage('assets/images/bottom_sheet_bg.webp'),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(AppTheme.radius24),
@@ -97,7 +97,7 @@ class AppBottomSheet extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(AppTheme.radius24),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
                 decoration: BoxDecoration(
                   color:

@@ -31,14 +31,16 @@ class ActivityCard extends StatelessWidget {
             children: [
               ProductImageHero(
                 imageUrl: activity.imageUrl,
-                topEndOverlay: ProductRatingPill(rating: activity.rating),
+                height: 170,
+                fadeHeight: 55,
+                bottomEndOverlay: GhostRatingPill(rating: activity.rating),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
                   0,
-                  AppTheme.spacing16,
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
+                  AppTheme.spacing12,
                 ),
                 child: _Body(activity: activity),
               ),
@@ -65,19 +67,19 @@ class _Body extends StatelessWidget {
       children: [
         Text(
           activity.title,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTypography.bodyLarge.copyWith(
+          style: AppTypography.bodyMedium.copyWith(
             color: AppTheme.textPrimary,
             fontWeight: AppTypography.extraBold,
-            height: 1.3,
+            height: 1.25,
           ),
         ),
         if (activity.days > 0 || activity.nights > 0) ...[
-          const SizedBox(height: AppTheme.spacing4),
+          const SizedBox(height: AppTheme.spacing2),
           _DurationRow(days: activity.days, nights: activity.nights),
         ],
-        const SizedBox(height: AppTheme.spacing12),
+        const SizedBox(height: AppTheme.spacing8),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -148,7 +150,7 @@ class _PriceRow extends StatelessWidget {
         MoneyWithIcon(
           money: price,
           precision: 0,
-          textSize: 16,
+          textSize: 15,
           color: AppTheme.textPrimary,
           fontWeight: AppTypography.extraBold,
         ),

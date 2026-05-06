@@ -10,7 +10,7 @@ class HomeRecommendedSection extends StatelessWidget {
   final List<Tour> tours;
   const HomeRecommendedSection({super.key, required this.tours});
 
-  static const double _listHeight = 268;
+  static const double _listHeight = 240;
 
   @override
   Widget build(BuildContext context) {

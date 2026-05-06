@@ -68,9 +68,9 @@ class EmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset(
-              lottieAsset ?? 'assets/json/empty_page_ui.json',
-              width: imageWidth ?? 200,
-              height: imageHeight ?? 200,
+              lottieAsset ?? 'assets/json/no_flights.json',
+              width: imageWidth ?? 210,
+              height: imageHeight ?? 210,
             ),
             Text(
               title ?? 'no_data'.tr,

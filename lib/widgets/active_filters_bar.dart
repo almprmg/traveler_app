@@ -87,12 +87,8 @@ class _FilterChip extends StatelessWidget {
         AppTheme.spacing4,
       ),
       decoration: BoxDecoration(
-        color: AppTheme.primary.withValues(alpha: 0.04),
+        color: AppTheme.white,
         borderRadius: BorderRadius.circular(AppTheme.radiusPill),
-        border: Border.all(
-          color: AppTheme.primary.withValues(alpha: 0.25),
-          width: 0.75,
-        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -100,7 +96,7 @@ class _FilterChip extends StatelessWidget {
           Text(
             filter.label,
             style: AppTypography.labelSmall.copyWith(
-              color: AppTheme.primary,
+              color: AppTheme.textPrimary,
               fontWeight: AppTypography.bold,
             ),
           ),
@@ -112,12 +108,12 @@ class _FilterChip extends StatelessWidget {
               height: 18,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: AppTheme.primary.withValues(alpha: 0.15),
+                color: AppTheme.error.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const HugeIcon(
                 icon: HugeIcons.strokeRoundedCancel01,
-                color: AppTheme.primary,
+                color: AppTheme.error,
                 size: 12,
               ),
             ),

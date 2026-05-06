@@ -35,14 +35,16 @@ class TransportCard extends StatelessWidget {
             children: [
               ProductImageHero(
                 imageUrl: transport.imageUrl,
-                topEndOverlay: ProductRatingPill(rating: transport.rating),
+                height: 170,
+                fadeHeight: 55,
+                bottomEndOverlay: GhostRatingPill(rating: transport.rating),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
                   0,
-                  AppTheme.spacing16,
-                  AppTheme.spacing16,
+                  AppTheme.spacing12,
+                  AppTheme.spacing12,
                 ),
                 child: _Body(transport: transport),
               ),
@@ -66,19 +68,19 @@ class _Body extends StatelessWidget {
       children: [
         Text(
           transport.title,
-          maxLines: 2,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTypography.bodyLarge.copyWith(
+          style: AppTypography.bodyMedium.copyWith(
             color: AppTheme.textPrimary,
             fontWeight: AppTypography.extraBold,
-            height: 1.3,
+            height: 1.25,
           ),
         ),
         if (transport.location != null) ...[
-          const SizedBox(height: AppTheme.spacing4),
+          const SizedBox(height: AppTheme.spacing2),
           _LocationRow(location: transport.location!),
         ],
-        const SizedBox(height: AppTheme.spacing12),
+        const SizedBox(height: AppTheme.spacing8),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -86,7 +88,7 @@ class _Body extends StatelessWidget {
               child: MoneyWithIcon(
                 money: transport.carPrice,
                 precision: 0,
-                textSize: 16,
+                textSize: 15,
                 color: AppTheme.textPrimary,
                 fontWeight: AppTypography.extraBold,
               ),
