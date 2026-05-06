@@ -21,9 +21,9 @@ class HomeActivitiesStrip extends StatelessWidget {
         onTap: () => Get.toNamed(hotelsRoute),
       ),
       _ActivityItem(
-        label: 'tab_activities'.tr,
-        image: 'assets/images/Activities_icon.webp',
-        onTap: () => Get.toNamed(activitiesRoute),
+        label: 'tab_transport'.tr,
+        image: 'assets/images/transport_icon.webp',
+        onTap: () => Get.toNamed(transportsRoute),
       ),
       _ActivityItem(
         label: 'tab_visa'.tr,
@@ -31,9 +31,9 @@ class HomeActivitiesStrip extends StatelessWidget {
         onTap: () => Get.toNamed(visasRoute),
       ),
       _ActivityItem(
-        label: 'tab_transport'.tr,
-        image: 'assets/images/transport_icon.webp',
-        onTap: () => Get.toNamed(transportsRoute),
+        label: 'tab_activities'.tr,
+        image: 'assets/images/Activities_icon.webp',
+        onTap: () => Get.toNamed(activitiesRoute),
       ),
     ];
 

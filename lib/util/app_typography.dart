@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppTypography {
-  // Import colors from AppTheme
-  static const Color primaryTextColor = Color(0xFF0F172A);    // AppTheme.textPrimary
-  static const Color secondaryTextColor = Color(0xFF475569);  // AppTheme.textSecondary  
-  static const Color accentTextColor = Color(0xFF475569);     // AppTheme.textSecondary
-  static const Color mutedTextColor = Color(0xFF64748B);      // AppTheme.textTertiary
-  static const Color lightTextColor = Color(0xFF94A3B8);     // AppTheme.secondaryLight
-  static const Color whiteTextColor = Color(0xFFFFFFFF);     // AppTheme.textOnPrimary
+  // Mirror of AppTheme text scale — keep these in sync with AppTheme.
+  static const Color primaryTextColor = Color(0xFF0A0B0E);    // AppTheme.textPrimary
+  static const Color secondaryTextColor = Color(0xFF353944);  // AppTheme.textSecondary
+  static const Color accentTextColor = Color(0xFF353944);     // AppTheme.textSecondary
+  static const Color mutedTextColor = Color(0xFF6E7380);      // AppTheme.textTertiary
+  static const Color lightTextColor = Color(0xFF9CA3AF);      // AppTheme.secondaryLight
+  static const Color whiteTextColor = Color(0xFFFFFFFF);      // AppTheme.textOnPrimary
 
   // Font Families
   static const String primaryFontFamily = 'Cairo';

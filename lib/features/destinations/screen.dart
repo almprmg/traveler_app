@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:traveler_app/base/app_cash_image.dart';
 import 'package:traveler_app/base/empty_state.dart';
 import 'package:traveler_app/features/destinations/controller/destinations_controller.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
+import 'package:traveler_app/widgets/app_search_field.dart';
 
 class DestinationsScreen extends StatefulWidget {
   const DestinationsScreen({super.key});
@@ -33,21 +33,7 @@ class _DestinationsScreenState extends State<DestinationsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: TextField(
-              onChanged: _c.search,
-              decoration: InputDecoration(
-                hintText: 'search_hint'.tr,
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: HugeIcon(
-                    icon: HugeIcons.strokeRoundedSearch01,
-                    color: AppTheme.textTertiary,
-                    size: 20,
-                  ),
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              ),
-            ),
+            child: AppSearchField(onChanged: _c.search),
           ),
           Expanded(
             child: Obx(() {

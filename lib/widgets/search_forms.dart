@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
+import 'package:traveler_app/base/app_bottom_sheet.dart';
 import 'package:traveler_app/features/home/model/home_model.dart';
 import 'package:traveler_app/util/app_theme.dart';
 import 'package:traveler_app/util/app_typography.dart';
 
 typedef _HugeIconData = List<List<dynamic>>;
 typedef SearchFormCallback = void Function(Map<String, dynamic> args);
-
-// ---------------- Card wrapper ----------------
 
 class _FormCard extends StatelessWidget {
   final Widget child;
@@ -53,7 +52,7 @@ class _FieldButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasValue = value != null && value!.isNotEmpty;
     return Material(
-      color: AppTheme.primary.withValues(alpha: 0.04),
+      color: AppTheme.backgroundLight,
       borderRadius: BorderRadius.circular(AppTheme.radius12),
       child: InkWell(
         borderRadius: BorderRadius.circular(AppTheme.radius12),
@@ -62,8 +61,18 @@ class _FieldButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(
             children: [
-              HugeIcon(icon: icon, color: AppTheme.primary, size: 22),
-              const SizedBox(width: 10),
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: Center(
+                  child: HugeIcon(
+                    icon: icon,
+                    color: AppTheme.primary,
+                    size: 18,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,55 +157,24 @@ Future<T?> _pickFromList<T>(
   required List<T> items,
   required String Function(T) labelOf,
 }) {
-  return showModalBottomSheet<T>(
-    context: context,
-    backgroundColor: AppTheme.white,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  return AppBottomSheet.show<T>(
+    title: title,
+    child: ListView.separated(
+      shrinkWrap: true,
+      padding: const EdgeInsets.fromLTRB(
+        AppTheme.spacing16,
+        0,
+        AppTheme.spacing16,
+        AppTheme.spacing16,
+      ),
+      itemCount: items.length,
+      separatorBuilder: (_, _) =>
+          const Divider(height: 1, color: AppTheme.border),
+      itemBuilder: (_, i) => ListTile(
+        title: Text(labelOf(items[i]), style: AppTypography.bodyLarge),
+        onTap: () => Navigator.of(context).pop(items[i]),
+      ),
     ),
-    builder: (ctx) {
-      return SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.borderMedium,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text(title, style: AppTypography.h4),
-              ),
-              Flexible(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: items.length,
-                  separatorBuilder: (_, _) =>
-                      const Divider(height: 1, color: AppTheme.border),
-                  itemBuilder: (_, i) => ListTile(
-                    title: Text(
-                      labelOf(items[i]),
-                      style: AppTypography.bodyLarge,
-                    ),
-                    onTap: () => Navigator.of(ctx).pop(items[i]),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
   );
 }
 
@@ -439,17 +417,23 @@ class _GuestCounter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: AppTheme.primary.withValues(alpha: 0.04),
+        color: AppTheme.backgroundLight,
         borderRadius: BorderRadius.circular(AppTheme.radius12),
       ),
       child: Row(
         children: [
-          const HugeIcon(
-            icon: HugeIcons.strokeRoundedUserMultiple,
-            color: AppTheme.primary,
-            size: 22,
+          const SizedBox(
+            width: 32,
+            height: 32,
+            child: Center(
+              child: HugeIcon(
+                icon: HugeIcons.strokeRoundedUserMultiple,
+                color: AppTheme.primary,
+                size: 18,
+              ),
+            ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,7 +7,7 @@ import 'package:traveler_app/features/tours/controller/tours_controller.dart';
 import 'package:traveler_app/features/tours/widgets/tour_card.dart';
 import 'package:traveler_app/routes.dart';
 import 'package:traveler_app/util/app_theme.dart';
-import 'package:hugeicons/hugeicons.dart';
+import 'package:traveler_app/widgets/app_search_field.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
@@ -52,14 +52,7 @@ class _ToursTab extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          child: TextField(
-            onChanged: c.search,
-            decoration: InputDecoration(
-              hintText: 'search_hint'.tr,
-              prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedSearch01),
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
-            ),
-          ),
+          child: AppSearchField(onChanged: c.search),
         ),
         Expanded(
           child: Obx(() {
@@ -102,14 +95,7 @@ class _HotelsTab extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          child: TextField(
-            onChanged: c.search,
-            decoration: InputDecoration(
-              hintText: 'search_hint'.tr,
-              prefixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedSearch01),
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
-            ),
-          ),
+          child: AppSearchField(onChanged: c.search),
         ),
         Expanded(
           child: Obx(() {

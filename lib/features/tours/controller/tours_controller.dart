@@ -12,6 +12,10 @@ class ToursController extends GetxController {
   final searchQuery = ''.obs;
   final selectedCategoryId = Rxn<String>();
   final selectedDestinationId = Rxn<String>();
+  final selectedDestinationName = Rxn<String>();
+  final selectedTourType = Rxn<String>();
+  final selectedMonth = Rxn<DateTime>();
+  final selectedDuration = Rxn<String>();
   final selectedSort = Rxn<String>();
 
   @override
@@ -54,6 +58,10 @@ class ToursController extends GetxController {
   void clearFilters() {
     selectedCategoryId.value = null;
     selectedDestinationId.value = null;
+    selectedDestinationName.value = null;
+    selectedTourType.value = null;
+    selectedMonth.value = null;
+    selectedDuration.value = null;
     selectedSort.value = null;
     searchQuery.value = '';
     fetch();
