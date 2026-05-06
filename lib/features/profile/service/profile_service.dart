@@ -39,11 +39,14 @@ class ProfileService extends GetxService {
     final response = await apiClient.uploadFile(
       '${AppConstants.profileUrl}/avatar',
       file,
+      fieldName: 'avatar',
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = json.decode(response.body);
       final data = body['data'] ?? body;
-      if (data is Map) return data['avatar_url']?.toString();
+      if (data is Map) {
+        return data['avatar_url']?.toString() ?? data['avatar']?.toString();
+      }
     }
     return null;
   }
